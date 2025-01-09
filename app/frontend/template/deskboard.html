@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/Productivity-Monitoring/frontend/static/css/deskboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h2>Admin Dashboard</h2>
+      <ul>
+        <li><a href="#" data-section="overview">Overview</a></li>
+        <li><a href="employee.html" data-section="Employess">Employess</a></li>
+        <li><a href="#" data-section="reports">Reports</a></li>
+        <li><a href="#" data-section="settings">Settings</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="topbar">
+        <h1 id="section-title">Overview</h1>
+        <button id="logout-btn">Logout</button>
+      </header>
+      <div id="content-area">
+        <p>Welcome to the admin dashboard! Select an option from the sidebar.</p>
+      </div>
+    </main>
+  </div>
+  <script src="/Productivity-Monitoring/frontend/template/employee.html"></script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employees Dashboard</title>
+  <link rel="stylesheet" href="/Productivity-Monitoring/frontend/static/css/employees.css">
+  <link rel="stylesheet" href="/Productivity-Monitoring/frontend/static/css/deskboard.css">
+
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <h2>Admin Dashboard</h2>
+          <ul>
+            <li><a href="#" data-section="overview">Overview</a></li>
+            <li><a href="employee.html" data-section="Employess">Employess</a></li>
+            <li><a href="#" data-section="reports">Reports</a></li>
+            <li><a href="#" data-section="settings">Settings</a></li>
+          </ul>
+        </aside>
+  <div class="employees-dashboard">
+    <header>
+      <h1>Employees Management</h1>
+      <!-- <button id="add-employee-btn">+ Add Employee</button> -->
+      <br>
+            <button onclick="showpage()", id="add-employee">add_employee</button>
+            <script>
+                function showpage() {
+                    window.location.href = 'add-employee.html';
+                }
+            </script>
+    </header>
+
+    <section>
+      <h2>Employee List</h2>
+      <table class="employee-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Department</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="employee-table-body">
+          <tr>
+            <td>1</td>
+            <td>John Doe</td>
+            <td>Software Engineer</td>
+            <td>IT</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Jane Smith</td>
+            <td>Project Manager</td>
+            <td>Operations</td>
+            <td>
+              <button class="edit-btn">Edit</button>
+              <button class="delete-btn">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    </div>
+  </div>
+
+  <!-- <script>
+    document.getElementById("add-employee-btn").addEventListener("click", function() {
+      alert("Add Employee functionality coming soon!");
+    });
+  </script> -->
+
+</body>
+</html>
