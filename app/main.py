@@ -8,7 +8,10 @@ from starlette.responses import HTMLResponse
 from starlette.requests import Request
 
 
+
 app = FastAPI()
+
+
 
 # Serving static files (like CSS, JS, etc.)
 app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
@@ -31,3 +34,10 @@ app.include_router(users_controller.router, prefix="/users")
 async def read_home(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("login.html", {"request": request})
+
+
+@app.get("/dashboard", response_class=HTMLResponse)
+async def read_home(request: Request):
+    # This will render the index.html template
+    return templates.TemplateResponse("dashboard.html", {"request": request})
+

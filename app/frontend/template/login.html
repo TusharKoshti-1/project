@@ -4,74 +4,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login Page</title>
   <link rel="stylesheet" type="text/css" href="/static/css/login.css">
-  <style>
-    /* Inline styling for quick demonstration */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f5;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    .login-container {
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 10px;
-      padding: 30px;
-      width: 300px;
-      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .imgcontainer {
-      text-align: center;
-    }
-    .image {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-    }
-    h1 {
-      text-align: center;
-    }
-    input[type="email"],
-    input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .error-message {
-      color: red;
-      font-size: 14px;
-    }
-    a {
-      display: block;
-      text-align: center;
-      margin-top: 15px;
-      color: #007bff;
-      text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
 </head>
 <body>
   <div class="login-container">
@@ -80,39 +12,16 @@
     </div>
     <h1>Login</h1>
     <form id="loginForm" onsubmit="validateLogin(event)">
-      <label for="username">Username</label>
-      <input type="email" id="username" placeholder="Enter Username (e.g.,het@gmail.com)" required>
-      <label for="password">Password</label>
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter Email (e.g.,abcd@gmail.com)" required>
+      <label for="password"
+       >Password</label>
       <input type="password" id="password" placeholder="Enter Password" required>
       <span id="errorMessage" class="error-message"></span>
       <button type="submit">Login</button>
     </form>
-    <a href="#">Forgot your password?</a>
   </div>
+  <script src="/static/js/login.js"></script>
 
-  <script>
-    function validateLogin(event) {
-      event.preventDefault(); // Prevent form submission
-      
-      // Hardcoded credentials
-      const validUsername = "het@gmail.com";
-      const validPassword = "admin123";
-
-      // Fetch user inputs
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
-      const errorMessage = document.getElementById("errorMessage");
-
-      // Clear previous error message
-      errorMessage.textContent = "";
-
-      // Validate credentials
-      if (username === validUsername && password === validPassword) {
-        window.location.href = "deskboard.html"; // Redirect to dashboard
-      } else {
-        errorMessage.textContent = "Invalid username or password.";
-      }
-    }
-  </script>
 </body>
 </html>

@@ -1,37 +1,43 @@
-// Show the modal
-function showModal() {
-    document.getElementById('id01').style.display = 'block';
+// login.js
+
+// Function to handle login
+async function validateLogin(event) {
+  event.preventDefault(); // Prevent default form submission
+
+  // Collect email and password from the form
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // API endpoint
+  const API_URL = "https://4bfb-103-176-11-62.ngrok-free.app/users/login";
+
+  try {
+      // Make the POST request to the API
+      const response = await fetch(API_URL, {
+          method: "POST",
+          headers: {
+              "ngrok-skip-browser-warning":"true",
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password}),
+      });
+
+      // Process the response
+      if (response.ok) {
+          const data = await response.json(); // Assuming API returns JSON
+          alert("Login successful!");
+          console.log("Token:", data.token); // Log token for development
+          // Save token securely, e.g., in sessionStorage
+          sessionStorage.setItem("token", data.token);
+          // Redirect to dashboard
+          window.location.href = "/dashboard";
+      } else {
+          const errorData = await response.json(); // Extract error details
+          alert(errorData.message || "Invalid email or password");
+      }
+  } catch (error) {
+      // Handle network or other errors
+      alert("Error connecting to the API: " + error.message);
+      console.error(error);
   }
-  
-  // Hide the modal
-  function hideModal() {
-    document.getElementById('id01').style.display = 'none';
-  }
-  
-  // Close the modal when clicking outside of it
-  window.onclick = function(event) {
-    const modal = document.getElementById('id01');
-    if (event.target == modal) {
-      hideModal();
-    }
-  }
-   function validateLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorElement = document.getElementById('error');
-            errorElement.textContent = '';
-
-            const passwordRegex = /[@&]/;
-
-            if (!username) {
-                errorElement.textContent = 'Email is required.';
-                return;
-            }
-
-            if (!passwordRegex.test(password)) {
-                errorElement.textContent = 'Password must contain at least one @ or & character.';
-                return;
-            }
-
-            alert('Login successful!');
-        }
+}
