@@ -40,4 +40,3 @@ async def read_home(request: Request):
 async def read_home(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("dashboard.html", {"request": request})
-

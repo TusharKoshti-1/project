@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   
       try {
         // Send a POST request to the API
-        const response = await fetch('https://4bfb-103-176-11-62.ngrok-free.app/users/register', {
+        const response = await fetch('https://exact-notable-tadpole.ngrok-free.app/users/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
