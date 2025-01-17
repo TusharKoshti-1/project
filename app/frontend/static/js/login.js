@@ -9,7 +9,7 @@ async function validateLogin(event) {
   const password = document.getElementById("password").value;
 
   // API endpoint
-  const API_URL = "https://4bfb-103-176-11-62.ngrok-free.app/users/login";
+  const API_URL = "https://exact-notable-tadpole.ngrok-free.app/users/login";
 
   try {
       // Make the POST request to the API
