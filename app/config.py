@@ -9,15 +9,7 @@ load_dotenv()
 
 CLIENT_ID = os.environ.get('client-id',None)
 CLIENT_SECRET = os.environ.get('client-secret',None)
-
-
-class OAuthConfig:
-    GOOGLE_CLIENT_ID = '754665354965-oosrn97ournnrdbv7njkubnro4li81vv.apps.googleusercontent.com'
-    GOOGLE_CLIENT_SECRET = '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'
-    GOOGLE_DISCOVERY_URL = "https://accounts.google.com/.well-known/openid-configuration"
-
-
-DATABASE_URL = "mysql+pymysql://root:9824@localhost/productivity_monitoring"
+DATABASE_URL = os.environ.get('database-url',None)
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
