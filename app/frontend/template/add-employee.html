@@ -1,45 +1,67 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Employee</title>
-  <link rel="stylesheet" href="/Productivity-Monitoring/frontend/static/css/add-employee.css">
-  <link rel="stylesheet" href="/Productivity-Monitoring/frontend/static/css/deskboard.css">
+  <link rel="stylesheet" href="/app/frontend/static/css/add-employee.css">
+  <link rel="stylesheet" href="/app/frontend/static/css/dashboard.css">
 </head>
+
 <body>
-    <div class="dashboard-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-          <h2>Admin Dashboard</h2>
-          <ul>
-            <li><a href="#" data-section="overview">Overview</a></li>
-            <li><a href="employee.html" data-section="Employess">Employess</a></li>
-            <li><a href="#" data-section="reports">Reports</a></li>
-            <li><a href="#" data-section="settings">Settings</a></li>
-          </ul>
-        </aside>
-  <div class="container">
-    <header>
-      <h1>Add New Employee</h1>
-    </header>
-    <main>
-      <div class="form-container">
-        <form id="employee-form">
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" placeholder="Enter employee email" required>
+  <div class="dashboard-container">
+    <!-- Sidebar (This should remain same across pages) -->
+    <aside class="sidebar">
+      <h2>Admin Dashboard</h2>
+      <ul>
+        <li><a href="#" data-section="overview" onclick="loadPage('overview')">Overview</a></li>
+        <li><a href="employee" data-section="Employee">Employees</a></li>
+        <li><a href="#" data-section="reports" onclick="loadPage('reports')">Reports</a></li>
+        <li><a href="#" data-section="settings" onclick="loadPage('settings')">Settings</a></li>
+      </ul>
+    </aside>
+    
+    <main class="main-content">
+      <!-- Top Bar with Logout -->
+      <header class="topbar">
+        <h1 id="section-title"></h1>  <!-- This remains here for topbar -->
+        <button id="logout-btn" onclick="logout()">Logout</button>
+      </header>
+      
+      <!-- Centered Form for Adding New Employee -->
+      <div class="center-container">
+        <div class="form-container">
+          <!-- This will only have the form now, no extra text -->
+          <form id="employee-form">
+            <h2>Add New Employee</h2> <!-- Text above input fields -->
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter employee email" required>
 
-          <label for="password">Password:</label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter password" required>
 
-          <button type="submit" class="submit-btn">Add Employee</button>
-        </form>
-        <a href="#" id="forgot-password">Forgot Password?</a>
+            <button type="submit" class="submit-btn">Add Employee</button>
+          </form>
+        </div>
       </div>
-     </main>
-    </div>
-    </div>
+    </main>
+  </div>
 
-  <script src="/Productivity-Monitoring/frontend/static/js/add_employee.js"></script>
+  <script>
+    function loadPage(page) {
+      window.location.href = page;
+    }
+
+    // Logout function
+    function logout() {
+      console.log("Logging out...");
+      // Redirect or handle logout logic here
+      window.location.href = '/login'; // Example: Redirect to login page
+    }
+  </script>
+ "<script src="/app/frontend/static/js/add-employee.js"></script>">
 </body>
+
 </html>
