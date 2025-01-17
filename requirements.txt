@@ -9,5 +9,7 @@ jinja2
 authlib
 httpx
 itsdangerous
-google-auth google-auth-oauthlib google-auth-httplib2
+google-auth 
+google-auth-oauthlib 
+google-auth-httplib2
 python-dotenv
