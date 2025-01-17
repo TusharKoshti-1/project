@@ -29,19 +29,25 @@ body {
     color: #333;
   }
   
-  #add-employee-btn {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  #add-employee-btn:hover {
-    background-color: #45a049;
-  }
+    .add-employee-btn {
+      padding: 10px 20px;
+      font-size: 16px;
+      color: white;
+      background-color: #4CAF50; /* Green color */
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .add-employee-btn:hover {
+      background-color: #45a049; /* Darker green on hover */
+    }
+
+    .add-employee-btn:focus {
+      outline: none;
+      box-shadow: 0 0 5px #4CAF50; /* Green glow when button is focused */
+    }
   
   section {
     margin-top: 20px;
