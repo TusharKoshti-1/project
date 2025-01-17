@@ -10,9 +10,6 @@ from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from .config import CLIENT_ID,CLIENT_SECRET
 
-
-
-
 app = FastAPI()
 app.add_middleware(SessionMiddleware,secret_key="add any string...")
 
@@ -59,8 +56,6 @@ async def read_home(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
-<<<<<<< HEAD
-=======
 @app.get("/employee", response_class=HTMLResponse)
 async def read_employee(request: Request):
     # This will render the index.html template
@@ -71,4 +66,26 @@ async def read_employee(request: Request):
 async def add_employee(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("addEmployee.html", {"request": request})
->>>>>>> 3ce590d242d8a8a6685966da6e497112cea47e99
+
+@app.get("/login")
+async def login(request: Request):
+    url = request.url_for('auth')
+    return await oauth.google.authorize_redirect(request,url)
+
+@app.get('/auth')
+async def auth(request: Request ):
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except OAuthError as e:
+        return templates.TemplateResponse(
+            name='error.html',
+            context={'request': request,'error':e.error}            
+            )
+    user= token.get('userinfo')
+    if user:
+        request.session['user'] = dict(user)
+    return templates.TemplateResponse(
+        name='dashboard.html',
+        context={'request': request, 'user' : dict(user)}
+    )
+    
