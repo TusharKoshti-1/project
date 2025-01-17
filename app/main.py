@@ -6,10 +6,28 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from starlette.responses import HTMLResponse
 from starlette.requests import Request
+from starlette.middleware.sessions import SessionMiddleware
+from authlib.integrations.starlette_client import OAuth, OAuthError
+from .config import CLIENT_ID,CLIENT_SECRET
+
 
 
 
 app = FastAPI()
+app.add_middleware(SessionMiddleware,secret_key="add any string...")
+
+oauth = OAuth()
+oauth.register(
+    name ='google',
+    server_metadata_url = "https://accounts.google.com/.well-known/openid-configuration",
+    client_id = CLIENT_ID,
+    client_secret = CLIENT_SECRET,
+    client_kwargs={
+        'scope':'email openid profile',
+        'redirect_url':'http://localhost:8000/auth/callback'
+    }
+)
+
 
 
 
@@ -42,6 +60,8 @@ async def read_home(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+<<<<<<< HEAD
+=======
 @app.get("/employee", response_class=HTMLResponse)
 async def read_employee(request: Request):
     # This will render the index.html template
@@ -51,4 +71,9 @@ async def read_employee(request: Request):
 @app.get("/add-employee", response_class=HTMLResponse)
 async def add_employee(request: Request):
     # This will render the index.html template
+<<<<<<< HEAD
     return templates.TemplateResponse("add-employee.html", {"request": request})
+=======
+    return templates.TemplateResponse("addEmployee.html", {"request": request})
+>>>>>>> 3ce590d242d8a8a6685966da6e497112cea47e99
+>>>>>>> 1067f5803375014cbb01eb85dbaf658d8006d0bd
