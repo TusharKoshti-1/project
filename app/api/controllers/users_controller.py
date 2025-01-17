@@ -25,7 +25,8 @@ router = APIRouter()
 @router.post("/register")
 def register(user_data: UserRegisterVO, db: Session = Depends(get_db)):
     user = register_user(db, user_data)
-    return {"msg": "User registered successfully", "user_id": user.id}
+    print(user_data)
+    return {"msg": "User registered successfully", "user_id": user.id, "role_id": user.role_id}
 
 @router.post("/login")
 def login(login_data: UserLoginVO, db: Session = Depends(get_db)):
