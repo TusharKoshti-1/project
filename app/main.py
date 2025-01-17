@@ -66,4 +66,26 @@ async def read_employee(request: Request):
 @app.get("/add-employee", response_class=HTMLResponse)
 async def add_employee(request: Request):
     # This will render the index.html template
-    return templates.TemplateResponse("add-employee.html", {"request": request})
+    return templates.TemplateResponse("addEmployee.html", {"request": request})
+
+@app.get("/login")
+async def login(request: Request):
+    url = request.url_for('auth')
+    return await oauth.google.authorize_redirect(request,url)
+
+@app.get('/auth')
+async def auth(request: Request ):
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except OAuthError as e:
+        return templates.TemplateResponse(
+            name='error.html',
+            context={'request': request,'error':e.error}            
+            )
+    user= token.get('userinfo')
+    if user:
+        request.session['user'] = dict(user)
+    return templates.TemplateResponse(
+        name='dashboard.html',
+        context={'request': request, 'user' : dict(user)}
+    )
