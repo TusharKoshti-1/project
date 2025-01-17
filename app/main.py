@@ -39,7 +39,6 @@ async def read_home(request: Request):
 @app.get("/dashboard", response_class=HTMLResponse)
 async def read_home(request: Request):
     # This will render the index.html template
-<<<<<<< HEAD
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
 @app.get("/employee", response_class=HTMLResponse)
@@ -52,12 +51,3 @@ async def read_employee(request: Request):
 async def add_employee(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("addEmployee.html", {"request": request})
-
-
-
-
-
-
-=======
-    return templates.TemplateResponse("dashboard.html", {"request": request})
->>>>>>> b7481e61548ec8dae7ec1cde1d5b7a0bfd36cd35
