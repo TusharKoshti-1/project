@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             body: JSON.stringify(formData),
         });
+        console.log(responseData);
     
         if (!response.ok) {
             throw new Error(`Failed to add employee. Status: ${response.status}`);
