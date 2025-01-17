@@ -24,6 +24,14 @@
         <div class="google-icon"></div>
         <span class="btn-text">Signin with Google</span>
       </a>
+      <button id="google-login-btn">Login with Google</button>
+
+<script>
+    document.getElementById('google-login-btn').addEventListener('click', function() {
+        window.location.href = '/login/google';
+    });
+</script>
+
     </form>
   </div>
   <script src="/static/js/login.js"></script>

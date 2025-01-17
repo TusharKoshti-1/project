@@ -36,7 +36,8 @@ templates = Jinja2Templates(directory="app/frontend/template")
 
 
 origins = ["http://127.0.0.1:5500",
-           "http://127.0.0.1:5501"]
+           "http://127.0.0.1:5501",
+           "http://127.0.0.1:8000"]
 
 app.add_middleware(CORSMiddleware,
                    allow_origins=origins,
@@ -62,7 +63,7 @@ async def read_employee(request: Request):
     return templates.TemplateResponse("employee.html", {"request": request})
 
 
-@app.get("/addEmployee", response_class=HTMLResponse)
+@app.get("/add-employee", response_class=HTMLResponse)
 async def add_employee(request: Request):
     # This will render the index.html template
     return templates.TemplateResponse("addEmployee.html", {"request": request})
@@ -88,4 +89,3 @@ async def auth(request: Request ):
         name='dashboard.html',
         context={'request': request, 'user' : dict(user)}
     )
-    

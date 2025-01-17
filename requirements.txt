@@ -6,3 +6,10 @@ passlib
 pydantic[email]
 python-jose
 jinja2
+authlib
+httpx
+itsdangerous
+google-auth 
+google-auth-oauthlib 
+google-auth-httplib2
+python-dotenv
