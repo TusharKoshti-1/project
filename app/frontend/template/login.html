@@ -19,6 +19,14 @@
       <input type="password" id="password" placeholder="Enter Password" required>
       <span id="errorMessage" class="error-message"></span>
       <button type="submit">Login</button>
+      <button id="google-login-btn">Login with Google</button>
+
+<script>
+    document.getElementById('google-login-btn').addEventListener('click', function() {
+        window.location.href = '/login/google';
+    });
+</script>
+
     </form>
   </div>
   <script src="/static/js/login.js"></script>
