@@ -1,6 +1,8 @@
-# app/main.py
+import secrets
 from fastapi import Depends, FastAPI, HTTPException
-from requests import Session 
+import logging
+from fastapi.responses import RedirectResponse
+from requests import Session
 from app.api.controllers import users_controller
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -9,117 +11,133 @@ from starlette.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
-
 from app.service.user_service import check_google_email
-from .config import CLIENT_ID,CLIENT_SECRET, get_db
+from .config import CLIENT_ID, CLIENT_SECRET, get_db
 
+# Initialize FastAPI application
 app = FastAPI()
-app.add_middleware(SessionMiddleware,secret_key="add any string...")
 
+# Add SessionMiddleware for storing session data (important for CSRF protection)
+app.add_middleware(SessionMiddleware, secret_key="your-secret-key",)  # Use "None" for cross-site requests)
+
+# Initialize OAuth instance
 oauth = OAuth()
 oauth.register(
-    name ='google',
-    server_metadata_url = "https://accounts.google.com/.well-known/openid-configuration",
-    client_id = CLIENT_ID,
-    client_secret = CLIENT_SECRET,
+    name='google',
+    server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
+    client_id=CLIENT_ID,
+    client_secret=CLIENT_SECRET,
     client_kwargs={
-        'scope':'email openid profile',
-        'redirect_url':'http://localhost:8000/auth/callback'
+        'scope': 'email openid profile',
+        'redirect_url': 'http://localhost:8000/auth/callback'  # Adjust if you change the redirect URL
     }
 )
 
-
-
-
-# Serving static files (like CSS, JS, etc.)
+# Static files (like CSS, JS)
 app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
 
-# Setting up the templates folder for Jinja2
+# Templates folder for Jinja2
 templates = Jinja2Templates(directory="app/frontend/template")
 
+# CORS configuration
+origins = ["http://127.0.0.1:5500", "http://127.0.0.1:5501", "http://127.0.0.1:8000"]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
-origins = ["http://127.0.0.1:5500",
-           "http://127.0.0.1:5501",
-           "http://127.0.0.1:8000"]
-
-app.add_middleware(CORSMiddleware,
-                   allow_origins=origins,
-                   allow_credentials=True,
-                   allow_methods=["*"],
-                   allow_headers=["*"])
+# Include users routes
 app.include_router(users_controller.router, prefix="/users")
 
+# Home route to show the login page
 @app.get("/", response_class=HTMLResponse)
 async def read_home(request: Request):
-    # This will render the index.html template
     return templates.TemplateResponse("login.html", {"request": request})
 
-
+# Dashboard route (to be displayed after successful login)
 @app.get("/dashboard", response_class=HTMLResponse)
 async def read_home(request: Request):
-    # This will render the index.html template
+    user = request.session.get('user')
+    if not user:
+        # Redirect to login if the user is not logged in
+        return templates.TemplateResponse("login.html", {"request": request})
+
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
+# Employee page route
 @app.get("/employee", response_class=HTMLResponse)
 async def read_employee(request: Request):
-    # This will render the index.html template
     return templates.TemplateResponse("employee.html", {"request": request})
 
-
+# Add employee page route
 @app.get("/add-employee", response_class=HTMLResponse)
 async def add_employee(request: Request):
-    # This will render the index.html template
     return templates.TemplateResponse("addEmployee.html", {"request": request})
 
+# Login route: this generates a state and redirects to Google OAuth
 @app.get("/login")
 async def login(request: Request):
-    url = request.url_for('auth')
-    return await oauth.google.authorize_redirect(request,url)
+    # Generate a random state to prevent CSRF attacks
+    state = secrets.token_urlsafe()
+    request.session['oauth_state'] = state  # Store state in session
 
-@app.get('/auth')
+    # Redirect user to Google's OAuth authorization endpoint
+    url = request.url_for('auth')  # The callback URL for OAuth
+    return await oauth.google.authorize_redirect(request, url, state=state)
+
+# OAuth callback route
+@app.get("/auth")
 async def auth(request: Request, db: Session = Depends(get_db)):
-    try:
-        # Get the token from Google's OAuth
-        token = await oauth.google.authorize_access_token(request)
-    except OAuthError as e:
-        # Render error page on OAuth failure
+    stored_state = request.session.get('oauth_state')
+    received_state = request.query_params.get('state')
+
+    if stored_state != received_state:
+        logging.error(f"State mismatch: stored {stored_state}, received {received_state}")
         return templates.TemplateResponse(
-            name='error.html',
-            context={'request': request, 'error': e.error}
+            'error.html',
+            context={'request': request, 'error': "State mismatch, possible CSRF attack."}
         )
 
-    # Get userinfo from the token
+    try:
+        token = await oauth.google.authorize_access_token(request)
+    except OAuthError as e:
+        logging.error(f"OAuthError: {e.error}")
+        return templates.TemplateResponse(
+            'error.html',
+            context={'request': request, 'error': f"OAuthError: {e.error}"}
+        )
+    print(token)
     user_info = token.get('userinfo')
+    print(user_info)
 
     if user_info:
         email = user_info.get('email')
 
-        # Use the new function to check if the email exists in the database
         try:
             user = check_google_email(db, email)
-            print(email + 'login succesful')
+            logging.info(f"User {email} logged in successfully.")
         except HTTPException as e:
-            print(email + 'not in database')
-            # If the user doesn't exist, render an error template
+            logging.error(f"User {email} not found in database: {e.detail}")
             return templates.TemplateResponse(
-                name='error.html',
-                context={'request': request, 'error': e.detail}
+                'error.html',
+                context={'request': request, 'error': f"User not found: {e.detail}"}
             )
 
-        # Store user data in the session
         request.session['user'] = {
             "email": user.email,
             "role_id": user.role_id
         }
 
-        # Render the dashboard with user data
-        return templates.TemplateResponse(
-            name='dashboard.html',
-            context={'request': request, 'user': request.session['user']}
-        )
+        # Clear the state from session after use
+        request.session.pop('oauth_state', None)
 
-    # Render error if no userinfo is found
+        # After successful login, redirect to the dashboard
+        return RedirectResponse('/dashboard')
+
     return templates.TemplateResponse(
-        name='error.html',
+        'error.html',
         context={'request': request, 'error': "Failed to retrieve user information from Google."}
     )
