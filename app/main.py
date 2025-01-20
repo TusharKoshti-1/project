@@ -1,5 +1,6 @@
 # app/main.py
-from fastapi import FastAPI 
+from fastapi import Depends, FastAPI, HTTPException
+from requests import Session 
 from app.api.controllers import users_controller
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
@@ -8,7 +9,9 @@ from starlette.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
-from .config import CLIENT_ID,CLIENT_SECRET
+
+from app.service.user_service import check_google_email
+from .config import CLIENT_ID,CLIENT_SECRET, get_db
 
 app = FastAPI()
 app.add_middleware(SessionMiddleware,secret_key="add any string...")
@@ -74,18 +77,49 @@ async def login(request: Request):
     return await oauth.google.authorize_redirect(request,url)
 
 @app.get('/auth')
-async def auth(request: Request ):
+async def auth(request: Request, db: Session = Depends(get_db)):
     try:
+        # Get the token from Google's OAuth
         token = await oauth.google.authorize_access_token(request)
     except OAuthError as e:
+        # Render error page on OAuth failure
         return templates.TemplateResponse(
             name='error.html',
-            context={'request': request,'error':e.error}            
+            context={'request': request, 'error': e.error}
+        )
+
+    # Get userinfo from the token
+    user_info = token.get('userinfo')
+
+    if user_info:
+        email = user_info.get('email')
+
+        # Use the new function to check if the email exists in the database
+        try:
+            user = check_google_email(db, email)
+            print(email + 'login succesful')
+        except HTTPException as e:
+            print(email + 'not in database')
+            # If the user doesn't exist, render an error template
+            return templates.TemplateResponse(
+                name='error.html',
+                context={'request': request, 'error': e.detail}
             )
-    user= token.get('userinfo')
-    if user:
-        request.session['user'] = dict(user)
+
+        # Store user data in the session
+        request.session['user'] = {
+            "email": user.email,
+            "role_id": user.role_id
+        }
+
+        # Render the dashboard with user data
+        return templates.TemplateResponse(
+            name='dashboard.html',
+            context={'request': request, 'user': request.session['user']}
+        )
+
+    # Render error if no userinfo is found
     return templates.TemplateResponse(
-        name='dashboard.html',
-        context={'request': request, 'user' : dict(user)}
+        name='error.html',
+        context={'request': request, 'error': "Failed to retrieve user information from Google."}
     )

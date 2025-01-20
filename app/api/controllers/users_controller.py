@@ -33,7 +33,7 @@ def login(login_data: UserLoginVO, db: Session = Depends(get_db)):
 
     # Create an access token upon successful login using default values
     access_token = create_access_token(data={"sub": user.email})  # Using default values for secret_key, algorithm, and expires_delta
-    return {"msg": "Login successful", "access_token": access_token, "token_type": "bearer"}
+    return {"msg": "Login successful", "access_token": access_token, "token_type": "bearer", "role_id" : user.role_id}
 
 @router.get("/employeedata")
 def employeedata(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
