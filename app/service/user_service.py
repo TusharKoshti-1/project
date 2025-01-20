@@ -25,6 +25,11 @@ def register_user(db: Session, user_data: UserRegisterVO):
 
 def login_user(db: Session, login_data: UserLoginVO):
     user = db.query(User).filter(User.email == login_data.email).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found."
+        )
     if not user or not verify_password(login_data.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -43,3 +48,14 @@ def admin_data(db: Session):
     # Query all Users where role_id is 1
     users = db.query(User).filter(User.role_id == 1).all()
     return users
+
+def check_google_email(db: Session, email: str):
+    # Query the database to check if the email exists
+    user = db.query(User).filter(User.email == email).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User with this email does not exist. Please register first."
+        )
+    return user
+
