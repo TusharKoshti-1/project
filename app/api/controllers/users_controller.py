@@ -5,6 +5,8 @@ from app.service.user_service import register_user, login_user, employee_data, a
 from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from app.config import get_db
 from app.utils.auth_utils import verify_access_token , create_access_token
+from pydantic import BaseModel
+from datetime import timedelta
 
 # OAuth2PasswordBearer is used for retrieving the token from the request
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
@@ -33,7 +35,9 @@ def login(login_data: UserLoginVO, db: Session = Depends(get_db)):
     user = login_user(db, login_data)  # Validate user credentials
 
     # Create an access token upon successful login using default values
-    access_token = create_access_token(data={"sub": user.email})  # Using default values for secret_key, algorithm, and expires_delta
+    access_token = create_access_token(data={"sub": user.email}) 
+    print(user.email)
+    print(user.password) # Using default values for secret_key, algorithm, and expires_delta
     return {"msg": "Login successful", "access_token": access_token, "token_type": "bearer", "role_id" : user.role_id}
 
 @router.get("/employeedata")

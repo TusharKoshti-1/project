@@ -12,7 +12,9 @@ from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from app.service.user_service import check_google_email
+from app.utils.auth_utils import create_access_token
 from .config import CLIENT_ID, CLIENT_SECRET, get_db
+from datetime import timedelta
 
 # Initialize FastAPI application
 app = FastAPI()
@@ -109,14 +111,16 @@ async def auth(request: Request, db: Session = Depends(get_db)):
             'error.html',
             context={'request': request, 'error': f"OAuthError: {e.error}"}
         )
-    print(token)
+    
+    logging.info(f"Token: {token}")
     user_info = token.get('userinfo')
-    print(user_info)
+    logging.info(f"User Info: {user_info}")
 
     if user_info:
         email = user_info.get('email')
 
         try:
+            # Check if the user exists in the database
             user = check_google_email(db, email)
             logging.info(f"User {email} logged in successfully.")
         except HTTPException as e:
@@ -126,16 +130,31 @@ async def auth(request: Request, db: Session = Depends(get_db)):
                 context={'request': request, 'error': f"User not found: {e.detail}"}
             )
 
+        # Store user info in session for later use
         request.session['user'] = {
             "email": user.email,
             "role_id": user.role_id
         }
 
+        # Create an access token for the user
+        access_token = create_access_token(data={"sub": user.email})
+
         # Clear the state from session after use
         request.session.pop('oauth_state', None)
 
-        # After successful login, redirect to the dashboard
-        return RedirectResponse('/dashboard')
+        # Set the access token in an HTTP-only cookie
+        response = RedirectResponse(url='/dashboard')
+        response.set_cookie(
+            key="access_token", 
+            value=access_token, 
+            httponly=True,  # HTTP-only flag prevents JS access
+            secure=True,    # Make sure to use `secure=True` in production (requires HTTPS)
+            max_age=timedelta(minutes=30),  # Token expiration
+            samesite="Lax"  # Helps mitigate CSRF attacks
+        )
+
+        # Redirect to the dashboard
+        return response
 
     return templates.TemplateResponse(
         'error.html',
