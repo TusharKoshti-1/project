@@ -5,6 +5,7 @@ from typing import Optional
 from fastapi import HTTPException
 import requests
 from jose.exceptions import JWTError as JoseJWTError
+import jwt # type: ignore
 
 # Security settings
 SECRET_KEY = "your-secret-key"  # Change this to a secure secret key
@@ -16,6 +17,11 @@ GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 
 # Password hash utilities
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def generate_reset_token(user_id: int):
+    expiration = datetime.utcnow() + timedelta(hours=1)
+    payload = {"user_id": user_id, "exp": expiration}
+    return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 
 def get_password_hash(password: str) -> str:
     return pwd_context.hash(password)

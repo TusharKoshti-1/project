@@ -160,3 +160,8 @@ async def auth(request: Request, db: Session = Depends(get_db)):
         'error.html',
         context={'request': request, 'error': "Failed to retrieve user information from Google."}
     )
+
+
+@app.get("/forgot-password", response_class=HTMLResponse)
+async def add_employee(request: Request):
+    return templates.TemplateResponse("forgot_password.html", {"request": request})

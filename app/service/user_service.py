@@ -1,8 +1,9 @@
-from app.dao.user_dao import User, Role
+from app.dao.user_dao import User, Role, get_user_by_email
 from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from sqlalchemy.orm import Session, joinedload
-from app.utils.auth_utils import get_password_hash, verify_password, create_access_token, verify_access_token
+from app.utils.auth_utils import get_password_hash, verify_password, create_access_token, verify_access_token, generate_reset_token
 from fastapi import HTTPException, status
+from app.utils.email_utils import send_email  # type: ignore
 
 def register_user(db: Session, user_data: UserRegisterVO):
     user = db.query(User).filter(User.email == user_data.email).first()
@@ -58,4 +59,16 @@ def check_google_email(db: Session, email: str):
             detail="User with this email does not exist. Please register first."
         )
     return user
+
+async def send_password_reset_email(email: str):
+    user = await get_user_by_email(email)
+    if not user:
+        raise Exception("Email not registered.")
+
+    reset_token = generate_reset_token(user["id"])
+    reset_link = f"http://localhost:8000/reset-password?token={reset_token}"
+    email_body = f"Click the link to reset your password: {reset_link}"
+
+    await send_email(email, "Password Reset Instructions", email_body)
+
 

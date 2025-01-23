@@ -26,3 +26,12 @@ class Role(Base):
     created_on = Column(DateTime, default=datetime.utcnow)
     modified_on = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     is_deleted = Column(Boolean, default=False)
+
+async def get_user_by_email(email: str):
+    # Replace this with your database query
+    users = [
+        {"id": 1, "email": "user1@example.com"},
+        {"id": 2, "email": "user2@example.com"}
+    ]
+    return next((user for user in users if user["email"] == email), None)
+

@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from app.service.user_service import register_user, login_user, employee_data, admin_data 
+from app.service.user_service import register_user, login_user, employee_data, admin_data, send_password_reset_email 
 from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from app.config import get_db
 from app.utils.auth_utils import verify_access_token , create_access_token
@@ -75,3 +75,11 @@ def admindata(current_user: dict = Depends(get_current_user), db: Session = Depe
         "msg": "Data Get Successfully",
         "users": response  # Return the list of users
     }
+
+@router.post("/forgot-password")
+async def forgot_password(email: str = Form(...)):
+    try:
+        await send_password_reset_email(email)
+        return {"message": "Password reset instructions have been sent to your email."}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
