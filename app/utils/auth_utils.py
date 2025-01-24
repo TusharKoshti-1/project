@@ -19,7 +19,7 @@ GOOGLE_CERTS_URL = "https://www.googleapis.com/oauth2/v3/certs"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def generate_reset_token(user_id: int):
-    expiration = datetime.utcnow() + timedelta(hours=1)
+    expiration = datetime.utcnow() + timedelta(minutes=10)
     payload = {"user_id": user_id, "exp": expiration}
     return jwt.encode(payload, SECRET_KEY, algorithm="HS256")
 

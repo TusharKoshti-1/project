@@ -23,3 +23,6 @@ class EmployeeDataVO(BaseModel):
     
     class Config:
         orm_mode = True
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr

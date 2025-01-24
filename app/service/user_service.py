@@ -1,4 +1,4 @@
-from app.dao.user_dao import User, Role, get_user_by_email
+from app.dao.user_dao import User, Role
 from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from sqlalchemy.orm import Session, joinedload
 from app.utils.auth_utils import get_password_hash, verify_password, create_access_token, verify_access_token, generate_reset_token
@@ -60,15 +60,29 @@ def check_google_email(db: Session, email: str):
         )
     return user
 
-async def send_password_reset_email(email: str):
-    user = await get_user_by_email(email)
+def send_password_reset_email(email: str , db: Session):
+    print(email)
+    user = db.query(User).filter(User.email == email).first()
     if not user:
-        raise Exception("Email not registered.")
-
-    reset_token = generate_reset_token(user["id"])
-    reset_link = f"http://localhost:8000/reset-password?token={reset_token}"
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Email not registered."
+            )
+    reset_token = generate_reset_token(user.id)
+    reset_link = f"https://exact-notable-tadpole.ngrok-free.app/reset-password?token={reset_token}"
     email_body = f"Click the link to reset your password: {reset_link}"
+    print("sending email")
+    send_email(email, "Password Reset Instructions", email_body)
 
-    await send_email(email, "Password Reset Instructions", email_body)
+
+# def get_user_by_email(db: Session, email: str):
+#     user = db.query(User).filter(User.email == email).first()
+#     if not user:
+#         raise HTTPException(
+#             status_code=status.HTTP_404_NOT_FOUND,
+#             detail="User not found."
+#         )
+    
+#     return user.email
 
 

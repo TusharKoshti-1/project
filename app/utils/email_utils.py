@@ -1,10 +1,10 @@
 import smtplib
 from email.mime.text import MIMEText
 
-async def send_email(to_email: str, subject: str, body: str):
-    sender_email = "your_email@example.com"
-    sender_password = "your_email_password"
-    smtp_server = "smtp.example.com"
+def send_email(to_email: str, subject: str, body: str):
+    sender_email = "tusharkoshti01@gmail.com"
+    sender_password = "xnph emrc zuhb ufdo"
+    smtp_server = "smtp.gmail.com"
     smtp_port = 587
 
     msg = MIMEText(body)

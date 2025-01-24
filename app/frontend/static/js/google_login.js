@@ -14,20 +14,20 @@
   }
   
   // Event listener for form submission (Login via email/password)
-  document.getElementById("loginForm").addEventListener("submit", validateLogin);
+  // document.getElementById("loginForm").addEventListener("submit", validateLogin);
   
   // Check if the user is already logged in (via sessionStorage or localStorage)
-  function checkLoginStatus() {
-    const token = sessionStorage.getItem("token") || localStorage.getItem("token");
+  // function checkLoginStatus() {
+  //   const token = sessionStorage.getItem("token") || localStorage.getItem("token");
   
-    if (token) {
-      // If a token exists, redirect to the dashboard
-      window.location.href = "/dashboard";
-    } else {
-      // If no token is found, keep the user on the login page
-      console.log("No token found. Please log in.");
-    }
-  }
+  //   if (token) {
+  //     // If a token exists, redirect to the dashboard
+  //     window.location.href = "/dashboard";
+  //   } else {
+  //     // If no token is found, keep the user on the login page
+  //     console.log("No token found. Please log in.");
+  //   }
+  // }
   
-  // Call this function to check login status when the page loads
-  window.onload = checkLoginStatus;
+  // // Call this function to check login status when the page loads
+  // window.onload = checkLoginStatus;
