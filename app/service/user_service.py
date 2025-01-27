@@ -72,11 +72,18 @@ def send_password_reset_email(email: str, db: Session):
             detail="Email not registered."
         )
     reset_token = generate_reset_token(user.id)
+            
+    # # Generate expiration time (10 minutes from now in UTC)
+    # expiration = datetime.utcnow()
 
-    # Add expiration timestamp to the reset link
-    expiration = (datetime.utcnow() + timedelta(minutes=10)).timestamp()
-    reset_link = f"https://exact-notable-tadpole.ngrok-free.app/reset-password?token={reset_token}&exp={int(expiration)}"
+    # # Convert expiration time to Unix timestamp (int)
+    # expiration_timestamp = int(expiration.timestamp())
 
+    # # Print expiration time and link
+    # print(f"Expiration time (UTC): {expiration}")
+    # print(f"Expiration timestamp (int): {expiration_timestamp}")
+    reset_link = f"https://exact-notable-tadpole.ngrok-free.app/reset-password?token={reset_token}"
+    print(reset_link)
     email_body = f"Click the link to reset your password: {reset_link}"
     print("sending email")
     send_email(email, "Password Reset Instructions", email_body)

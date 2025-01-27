@@ -20,7 +20,7 @@ async function validateLogin(event) {
       const data = await response.json();
       alert("Login successful!");
       console.log("Token:", data.token);
-      sessionStorage.setItem("token", data.access_token);
+      sessionStorage.setItem("user", data.access_token);
       window.location.href = "/dashboard";
     } else {
       const errorData = await response.json();

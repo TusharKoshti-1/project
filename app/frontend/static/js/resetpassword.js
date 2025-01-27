@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const expiration = urlParams.get("exp");
+    // const expiration =urlParams.get('exp');
 
     if (expiration) {
       const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+      // console.log(currentTime + 'this is current time');
+      // console.log(expiration + 'this is expiration time');
       if (currentTime > expiration) {
         document.body.innerHTML = `
           <div style="text-align: center; padding: 20px;">
