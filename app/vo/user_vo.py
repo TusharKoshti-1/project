@@ -7,14 +7,14 @@ class UserRegisterVO(BaseModel):
     role_id: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class UserLoginVO(BaseModel):
     email: EmailStr
     password: str
 
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class EmployeeDataVO(BaseModel):
     email: EmailStr
@@ -22,7 +22,11 @@ class EmployeeDataVO(BaseModel):
     role_type: str
     
     class Config:
-        orm_mode = True
+        from_attributes = True
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    password: str

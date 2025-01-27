@@ -4,10 +4,6 @@ async function validateLogin(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  // Disable the button to prevent multiple submissions
-  const loginButton = document.getElementById("loginButton");
-  loginButton.disabled = true;
-
   const API_URL = "https://exact-notable-tadpole.ngrok-free.app/users/login";
 
   try {

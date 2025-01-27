@@ -1,7 +1,7 @@
 from app.dao.user_dao import User, Role
 from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from sqlalchemy.orm import Session, joinedload
-from app.utils.auth_utils import get_password_hash, verify_password, create_access_token, verify_access_token, generate_reset_token
+from app.utils.auth_utils import decode_reset_token, get_password_hash, is_token_expired, verify_password, create_access_token, verify_access_token, generate_reset_token
 from fastapi import HTTPException, status
 from app.utils.email_utils import send_email  # type: ignore
 
@@ -60,29 +60,49 @@ def check_google_email(db: Session, email: str):
         )
     return user
 
-def send_password_reset_email(email: str , db: Session):
+from datetime import datetime, timedelta
+
+def send_password_reset_email(email: str, db: Session):
     print(email)
     user = db.query(User).filter(User.email == email).first()
     if not user:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Email not registered."
-            )
+        print("email is not in database")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Email not registered."
+        )
     reset_token = generate_reset_token(user.id)
-    reset_link = f"https://exact-notable-tadpole.ngrok-free.app/reset-password?token={reset_token}"
+
+    # Add expiration timestamp to the reset link
+    expiration = (datetime.utcnow() + timedelta(minutes=10)).timestamp()
+    reset_link = f"https://exact-notable-tadpole.ngrok-free.app/reset-password?token={reset_token}&exp={int(expiration)}"
+
     email_body = f"Click the link to reset your password: {reset_link}"
     print("sending email")
     send_email(email, "Password Reset Instructions", email_body)
 
+def reset_user_password(token: str, new_password: str, db: Session):
+    try:
+        # Decode and validate the token
+        payload = decode_reset_token(token)
+        user_id = payload.get("user_id")
+        if not user_id:
+            raise HTTPException(status_code=400, detail="Invalid token.")
 
-# def get_user_by_email(db: Session, email: str):
-#     user = db.query(User).filter(User.email == email).first()
-#     if not user:
-#         raise HTTPException(
-#             status_code=status.HTTP_404_NOT_FOUND,
-#             detail="User not found."
-#         )
-    
-#     return user.email
+        # Check if the token has expired
+        is_token_expired(payload.get("exp"))
 
+        # Find the user by ID
+        user = db.query(User).filter(User.id == user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found.")
 
+        # Hash the new password and update it in the database
+        hashed_password = get_password_hash(new_password)
+        user.password = hashed_password
+        db.commit()
+
+        return {"message": "Password updated successfully."}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

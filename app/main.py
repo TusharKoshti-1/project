@@ -165,3 +165,8 @@ async def auth(request: Request, db: Session = Depends(get_db)):
 @app.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password(request: Request):
     return templates.TemplateResponse("forgot_password.html", {"request": request})
+
+
+@app.get("/reset-password", response_class=HTMLResponse)
+async def reset_password(request: Request):
+    return templates.TemplateResponse("resetpassword.html", {"request": request})

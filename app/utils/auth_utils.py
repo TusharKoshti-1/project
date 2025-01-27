@@ -104,3 +104,19 @@ def verify_google_id_token(id_token: str):
         raise HTTPException(status_code=400, detail="Invalid token or failed verification")
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error verifying token: " + str(e))
+    
+def decode_reset_token(token: str):
+    try:
+        # Decode the JWT token
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        return payload
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=400, detail="Token has expired.")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=400, detail="Invalid token.")
+
+def is_token_expired(expiration: int):
+    # Check if the token's expiration timestamp has passed
+    if datetime.utcnow().timestamp() > expiration:
+        raise HTTPException(status_code=400, detail="Token has expired.")
+

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
-from app.service.user_service import register_user, login_user, employee_data, admin_data, send_password_reset_email 
-from app.vo.user_vo import ForgotPasswordRequest, UserRegisterVO, UserLoginVO, EmployeeDataVO
+from app.service.user_service import register_user, login_user, employee_data, admin_data, reset_user_password, send_password_reset_email 
+from app.vo.user_vo import ForgotPasswordRequest, ResetPasswordRequest, UserRegisterVO, UserLoginVO, EmployeeDataVO
 from app.config import get_db
 from app.utils.auth_utils import verify_access_token , create_access_token
 from pydantic import BaseModel
@@ -82,3 +82,7 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
         return {"message": "Password reset instructions have been sent to your email."}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+    
+@router.post("/reset-password")
+def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
+    return reset_user_password(request.token, request.password, db)
