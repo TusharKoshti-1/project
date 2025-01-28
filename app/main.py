@@ -1,9 +1,8 @@
 import secrets
-from fastapi import Depends, FastAPI, HTTPException
 import logging
+from datetime import timedelta
+from fastapi import Depends, FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
-from requests import Session
-from app.api.controllers import users_controller
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
@@ -11,75 +10,79 @@ from starlette.responses import HTMLResponse
 from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
+from requests import Session
+from app.api.controllers import users_controller
 from app.service.user_service import check_google_email
 from app.utils.auth_utils import create_access_token
 from .config import CLIENT_ID, CLIENT_SECRET, get_db
-from datetime import timedelta
 
 # Initialize FastAPI application
 app = FastAPI()
 
-# Add SessionMiddleware for storing session data (important for CSRF protection)
-app.add_middleware(SessionMiddleware, secret_key="your-secret-key",)  # Use "None" for cross-site requests)
+# Add SessionMiddleware for storing session data
+app.add_middleware(SessionMiddleware, secret_key="your-secret-key")
 
 # Initialize OAuth instance
 oauth = OAuth()
 oauth.register(
-    name='google',
+    name="google",
     server_metadata_url="https://accounts.google.com/.well-known/openid-configuration",
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
     client_kwargs={
-        'scope': 'email openid profile',
-        'redirect_url': 'http://localhost:8000/auth/callback'  # Adjust if you change the redirect URL
-    }
+        "scope": "email openid profile",
+        'redirect_url': 'http://localhost:8000/auth/callback'
+    },
 )
 
-# Static files (like CSS, JS)
+# Static files (e.g., CSS, JS)
 app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
 
 # Templates folder for Jinja2
 templates = Jinja2Templates(directory="app/frontend/template")
 
 # CORS configuration
-origins = ["http://127.0.0.1:5500", "http://127.0.0.1:5501", "http://127.0.0.1:8000"]
+origins = [
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1:5501",
+    "http://127.0.0.1:8000",
+]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 # Include users routes
 app.include_router(users_controller.router, prefix="/users")
 
-# Home route to show the login page
+
 @app.get("/", response_class=HTMLResponse)
-async def read_home(request: Request):
+async def home(request: Request):
+    """Home route to display the login page."""
     return templates.TemplateResponse("login.html", {"request": request})
 
-# Dashboard route (to be displayed after successful login)
-@app.get("/dashboard", response_class=HTMLResponse)
-async def read_home(request: Request):
-    user = request.session.get('user')
-    if not user:
-        # Redirect to login if the user is not logged in
-        return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get("/dashboard", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    """Dashboard route (protected, requires login)."""# Redirect to login if not logged in
     return templates.TemplateResponse("dashboard.html", {"request": request})
 
-# Employee page route
+
 @app.get("/employee", response_class=HTMLResponse)
-async def read_employee(request: Request):
+async def employee_page(request: Request):
+    """Employee page route."""
     return templates.TemplateResponse("employee.html", {"request": request})
 
-# Add employee page route
+
 @app.get("/add-employee", response_class=HTMLResponse)
-async def add_employee(request: Request):
+async def add_employee_page(request: Request):
+    """Add employee page route."""
     return templates.TemplateResponse("addEmployee.html", {"request": request})
 
-# Login route: this generates a state and redirects to Google OAuth
+
 @app.get("/login")
 async def login(request: Request):
     # Generate a random state to prevent CSRF attacks
@@ -90,7 +93,6 @@ async def login(request: Request):
     url = request.url_for('auth')  # The callback URL for OAuth
     return await oauth.google.authorize_redirect(request, url, state=state)
 
-# OAuth callback route
 @app.get("/auth")
 async def auth(request: Request, db: Session = Depends(get_db)):
     stored_state = request.session.get('oauth_state')
@@ -164,9 +166,11 @@ async def auth(request: Request, db: Session = Depends(get_db)):
 
 @app.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password(request: Request):
+    """Forgot password page route."""
     return templates.TemplateResponse("forgot_password.html", {"request": request})
 
 
 @app.get("/reset-password", response_class=HTMLResponse)
 async def reset_password(request: Request):
+    """Reset password page route."""
     return templates.TemplateResponse("resetpassword.html", {"request": request})
