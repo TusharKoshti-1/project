@@ -29,8 +29,5 @@ async function validateLogin(event) {
   } catch (error) {
     alert("Error connecting to the API: " + error.message);
     console.error(error);
-  } finally {
-    // Re-enable the button after the request is complete
-    loginButton.disabled = false;
   }
 }
