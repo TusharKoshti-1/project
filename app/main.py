@@ -13,7 +13,7 @@ from authlib.integrations.starlette_client import OAuth, OAuthError
 from requests import Session
 from app.api.controllers import users_controller
 from app.service.user_service import check_google_email
-from app.utils.auth_utils import create_access_token
+from app.utils.auth_utils import create_access_token, verify_access_token
 from .config import CLIENT_ID, CLIENT_SECRET, get_db
 
 # Initialize FastAPI application
@@ -58,18 +58,41 @@ app.add_middleware(
 # Include users routes
 app.include_router(users_controller.router, prefix="/users")
 
+@app.get("/")
+async def home():
+    return RedirectResponse(url='/dashboard')
 
-@app.get("/", response_class=HTMLResponse)
-async def home(request: Request):
+@app.get("/login", response_class=HTMLResponse)
+async def login(request: Request):
     """Home route to display the login page."""
     return templates.TemplateResponse("login.html", {"request": request})
 
 
+# Modify the dashboard route
 @app.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(request: Request):
-    """Dashboard route (protected, requires login)."""# Redirect to login if not logged in
+async def dashboard(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show dashboard
     return templates.TemplateResponse("dashboard.html", {"request": request})
-
 
 @app.get("/employee", response_class=HTMLResponse)
 async def employee_page(request: Request):
@@ -83,7 +106,7 @@ async def add_employee_page(request: Request):
     return templates.TemplateResponse("addEmployee.html", {"request": request})
 
 
-@app.get("/login")
+@app.get("/googlelogin")
 async def login(request: Request):
     # Generate a random state to prevent CSRF attacks
     state = secrets.token_urlsafe()
@@ -139,7 +162,7 @@ async def auth(request: Request, db: Session = Depends(get_db)):
         }
 
         # Create an access token for the user
-        access_token = create_access_token(data={"sub": user.email})
+        access_token = create_access_token(data={"sub": user.email},expires_delta=60)
 
         # Clear the state from session after use
         request.session.pop('oauth_state', None)

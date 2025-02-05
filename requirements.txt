@@ -15,3 +15,7 @@ google-auth-httplib2
 python-dotenv
 jwt
 python-multipart
+opencv-python
+mediapipe
+facenet_pytorch
+uvicorn[standard]

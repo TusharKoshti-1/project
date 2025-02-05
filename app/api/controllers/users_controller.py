@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Form, HTTPException, status
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.service.user_service import register_user, login_user, employee_data, admin_data, reset_user_password, send_password_reset_email 
@@ -30,16 +31,32 @@ def register(user_data: UserRegisterVO, db: Session = Depends(get_db)):
     print(user_data)
     return {"msg": "User registered successfully", "user_id": user.id, "role_id": user.role_id}
 
+
 @router.post("/login")
 def login(login_data: UserLoginVO, db: Session = Depends(get_db)):
     user = login_user(db, login_data)  # Validate user credentials
 
-    # Create an access token upon successful login using default values
+    # Create an access token upon successful login
     access_token = create_access_token(data={"sub": user.email}) 
-    print(user.email)
-    print(user.password) # Using default values for secret_key, algorithm, and expires_delta
-    return {"msg": "Login successful", "access_token": access_token, "token_type": "bearer", "role_id" : user.role_id}
 
+    response = JSONResponse(content={
+        "msg": "Login successful",
+        "access_token": access_token,
+        "token_type": "bearer",
+        "role_id": user.role_id
+    })
+    
+    # Set access token in cookies
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,  # Prevent JavaScript access (XSS protection)
+        secure=True,  # Use Secure cookies if running over HTTPS
+        samesite="Lax",  # Adjust as needed
+        max_age=3600  # Token expiry in seconds
+    )
+    
+    return response
 @router.get("/employeedata")
 def employeedata(current_user: dict = Depends(get_current_user), db: Session = Depends(get_db)):
     # We can now access the user info from the current_user
