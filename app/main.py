@@ -11,7 +11,7 @@ from starlette.requests import Request
 from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
 from requests import Session
-from app.api.controllers import users_controller
+from app.api.controllers import users_controller,employee_controller
 from app.service.user_service import check_google_email
 from app.utils.auth_utils import create_access_token, verify_access_token
 from .config import CLIENT_ID, CLIENT_SECRET, get_db
@@ -37,6 +37,8 @@ oauth.register(
 
 # Static files (e.g., CSS, JS)
 app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")
+app.mount("/uploads", StaticFiles(directory="app/uploads"), name="uploads")
+
 
 # Templates folder for Jinja2
 templates = Jinja2Templates(directory="app/frontend/template")
@@ -57,6 +59,8 @@ app.add_middleware(
 
 # Include users routes
 app.include_router(users_controller.router, prefix="/users")
+app.include_router(employee_controller.router, prefix="/employee")
+
 
 @app.get("/")
 async def home():
@@ -66,6 +70,11 @@ async def home():
 async def login(request: Request):
     """Home route to display the login page."""
     return templates.TemplateResponse("login.html", {"request": request})
+
+@app.get("/test", response_class=HTMLResponse)
+async def test(request: Request):
+    """Home route to display the test page."""
+    return templates.TemplateResponse("test.html", {"request": request})
 
 
 # Modify the dashboard route
@@ -103,7 +112,7 @@ async def employee_page(request: Request):
 @app.get("/add-employee", response_class=HTMLResponse)
 async def add_employee_page(request: Request):
     """Add employee page route."""
-    return templates.TemplateResponse("addEmployee.html", {"request": request})
+    return templates.TemplateResponse("add-employee.html", {"request": request})
 
 
 @app.get("/googlelogin")

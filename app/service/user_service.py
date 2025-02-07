@@ -1,5 +1,5 @@
 from app.dao.user_dao import User, Role
-from app.vo.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
+from app.schemas.user_vo import UserRegisterVO, UserLoginVO, EmployeeDataVO
 from sqlalchemy.orm import Session, joinedload
 from app.utils.auth_utils import decode_reset_token, get_password_hash, is_token_expired, verify_password, create_access_token, verify_access_token, generate_reset_token
 from fastapi import HTTPException, status

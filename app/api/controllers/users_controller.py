@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.orm import Session
 from app.service.user_service import register_user, login_user, employee_data, admin_data, reset_user_password, send_password_reset_email 
-from app.vo.user_vo import ForgotPasswordRequest, ResetPasswordRequest, UserRegisterVO, UserLoginVO, EmployeeDataVO
+from app.schemas.user_vo import ForgotPasswordRequest, ResetPasswordRequest, UserRegisterVO, UserLoginVO, EmployeeDataVO
 from app.config import get_db
 from app.utils.auth_utils import verify_access_token , create_access_token
 from pydantic import BaseModel
