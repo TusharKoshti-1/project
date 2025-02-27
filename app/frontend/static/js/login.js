@@ -4,7 +4,7 @@ async function validateLogin(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const API_URL = "https://exact-notable-tadpole.ngrok-free.app/users/login";
+  const API_URL = " http://127.0.0.1:8000/users/login";
 
   try {
     const response = await fetch(API_URL, {

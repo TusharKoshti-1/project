@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login Page</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/login.css">
+</head>
+<body>
+  <div class="login-container">
+    <div class="imgcontainer">
+      <img src="/static/assets/image.png" alt="Image" class="image">
+    </div>
+    <h1>Login</h1>
+    
+    <!-- Email/Password Login Form -->
+    <form id="loginForm" onsubmit="validateLogin(event)">
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter Email (e.g., abcd@gmail.com)" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter Password" required>
+
+      <span id="errorMessage" class="error-message"></span>
+      
+      <button type="submit">Login</button>
+    </form>
+
+    <!-- Google login button -->
+    <button type="button" id="googleLoginButton" class="google-btn">
+      <div class="google-icon"></div>
+      <span class="btn-text">Sign in with Google</span>
+    </button>
+
+    <form action="/login" method="post">
+      <!-- Existing login form elements -->
+      <div class="forgot-password">
+        <a href="/forgot-password">Forgot Password?</a>
+      </div>
+    </form>
+    
+
+  <script src="/static/js/login.js"></script>
+  <script src="/static/js/google_login.js"></script>
+
+</body>
+</html>

@@ -71,6 +71,11 @@ async def login(request: Request):
     """Home route to display the login page."""
     return templates.TemplateResponse("login.html", {"request": request})
 
+@app.get("/register", response_class=HTMLResponse)
+async def register(request: Request):
+    
+    return templates.TemplateResponse("register.html", {"request": request})
+
 @app.get("/test", response_class=HTMLResponse)
 async def test(request: Request):
     """Home route to display the test page."""
@@ -199,7 +204,7 @@ async def auth(request: Request, db: Session = Depends(get_db)):
 @app.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password(request: Request):
     """Forgot password page route."""
-    return templates.TemplateResponse("forgot_password.html", {"request": request})
+    return templates.TemplateResponse("forgot-password.html", {"request": request})
 
 
 @app.get("/reset-password", response_class=HTMLResponse)

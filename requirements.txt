@@ -19,3 +19,5 @@ opencv-python
 mediapipe
 facenet_pytorch
 uvicorn[standard]
+bcrypt
+supabase

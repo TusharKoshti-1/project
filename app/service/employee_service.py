@@ -1,33 +1,39 @@
 import os
-from uuid import uuid4
+from uuid import uuid1, uuid4
 from app.dao.user_dao import User
 from app.dao.employee_dao import Employee
 from sqlalchemy.orm import Session
 from app.utils.auth_utils import get_password_hash
 from fastapi import File, HTTPException, UploadFile, status
+from supabase import create_client
 
-UPLOAD_DIR = "app/uploads/employee_images"
-PUBLIC_UPLOAD_DIR = "/upload/employee_images"  # Relative path for serving files
+
+# Supabase Configuration
+SUPABASE_URL =  os.environ.get('SUPABASE_URL',None )
+SUPABASE_KEY = os.environ.get('SUPABASE_KEY',None )
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Function to save uploaded image
 def save_uploaded_image(file: UploadFile):
-    """ Saves the uploaded file and returns its relative path. """
-    if not file:
+    """ Saves the uploaded file and returns its file path. """
+    if file:
+        bucket_name = "Emp image"  # Ensure this matches your Supabase bucket name
+        file_extension = os.path.splitext(file.filename)[1]
+        unique_filename = f"{uuid1()}{file_extension}"
+        file_path = f"employee_images/{unique_filename}"  # Folder inside the bucket
+
+        # Read file content
+        file_content = file.file.read()
+
+        # Upload to Supabase Storage
+        response = supabase.storage.from_(bucket_name).upload(file_path, file_content, {"content-type": file.content_type})
+
+        if response:
+            # Generate public URL for the uploaded file
+            public_url = f"{SUPABASE_URL}/storage/v1/object/public/{bucket_name}/{file_path}"
+            return public_url
+        
         return None
-
-    os.makedirs(UPLOAD_DIR, exist_ok=True)  # Ensure directory exists
-
-    # Generate a unique filename
-    file_extension = os.path.splitext(file.filename)[1]
-    unique_filename = f"{uuid4()}{file_extension}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
-
-    # Save file
-    with open(file_path, "wb") as buffer:
-        buffer.write(file.file.read())
-
-    # Return relative URL path instead of absolute path
-    return f"{PUBLIC_UPLOAD_DIR}/{unique_filename}"
 
 # Employee registration function
 def register_employee_service(db: Session, employee_data, file: UploadFile = File(...)):
@@ -46,6 +52,8 @@ def register_employee_service(db: Session, employee_data, file: UploadFile = Fil
 
         # Save profile image
         profile_image_url = save_uploaded_image(file) if file else None
+
+        print(profile_image_url)
 
         # Create new user
         new_user = User(

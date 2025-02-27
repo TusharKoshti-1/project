@@ -5,7 +5,6 @@ from typing import Optional
 from fastapi import HTTPException
 import requests
 from jose.exceptions import JWTError as JoseJWTError
-import jwt # type: ignore
 
 # Security settings
 SECRET_KEY = "your-secret-key"  # Change this to a secure secret key
