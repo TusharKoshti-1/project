@@ -1,6 +1,4 @@
-from fastapi import File, Form, UploadFile
 from pydantic import BaseModel, EmailStr 
-from datetime import datetime
 
 class EmployeeRegister(BaseModel):
     name: str

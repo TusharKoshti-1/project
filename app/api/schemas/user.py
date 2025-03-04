@@ -1,6 +1,8 @@
 from pydantic import BaseModel, EmailStr 
 from datetime import datetime
-class UserRegisterVO(BaseModel):
+
+
+class UserRegister(BaseModel):
     email: EmailStr
     password: str
     role_id: int
@@ -8,18 +10,10 @@ class UserRegisterVO(BaseModel):
     class Config:
         from_attributes = True
 
-class UserLoginVO(BaseModel):
+class UserLogin(BaseModel):
     email: EmailStr
     password: str
 
-    class Config:
-        from_attributes = True
-
-class EmployeeDataVO(BaseModel):
-    email: EmailStr
-    created_on: datetime
-    role_type: str
-    
     class Config:
         from_attributes = True
 

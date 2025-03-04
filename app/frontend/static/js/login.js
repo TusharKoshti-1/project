@@ -4,7 +4,7 @@ async function validateLogin(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const API_URL = " http://127.0.0.1:8000/users/login";
+  const API_URL = " http://127.0.0.1:8000/auth/login";
 
   try {
     const response = await fetch(API_URL, {
