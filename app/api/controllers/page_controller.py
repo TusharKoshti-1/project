@@ -59,4 +59,4 @@ async def forgot_password(request: Request):
 @router.get("/reset-password", response_class=HTMLResponse)
 async def reset_password(request: Request):
     """Reset password page route."""
-    return templates.TemplateResponse("resetpassword.html", {"request": request})
+    return templates.TemplateResponse("reset-password.html", {"request": request})
