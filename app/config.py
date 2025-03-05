@@ -34,6 +34,9 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+
+
+
 # Dependency to get a database session
 def get_db():
     db = SessionLocal()

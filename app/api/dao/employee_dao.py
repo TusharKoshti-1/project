@@ -7,6 +7,7 @@ class EmployeeDAO:
     def create_employee(db: Session, employee_data: dict) -> Employee:
         new_employee = Employee(
             name=employee_data['name'],
+            phone=employee_data['phone'],
             age=employee_data['age'],
             gender=employee_data['gender'],
             department_name=employee_data['department_name'],

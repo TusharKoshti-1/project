@@ -61,6 +61,7 @@ class EmployeeService:
             # Create employee record
             EmployeeDAO.create_employee(self.db, {
                 'name': employee_data.name,
+                'phone': employee_data.phone,
                 'age': employee_data.age,
                 'gender': employee_data.gender,
                 'department_name': employee_data.department_name,

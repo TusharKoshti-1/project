@@ -8,6 +8,7 @@ class Employee(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100), nullable=False)
+    phone = Column(String(20), nullable=False)
     age = Column(Integer, nullable=False)
     gender = Column(String(10))
     department_name = Column(String(100))

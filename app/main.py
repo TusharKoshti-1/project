@@ -3,13 +3,15 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
 from app.api.controllers import admin_controller, auth_controller,employee_controller, googlelogin_controller, page_controller
-from .config import CLIENT_ID, CLIENT_SECRET
+from .config import CLIENT_ID, CLIENT_SECRET, Base, engine
 
 # Initialize FastAPI application
 app = FastAPI()
 
 # Add SessionMiddleware for storing session data
 app.add_middleware(SessionMiddleware, secret_key="your-secret-key")
+
+Base.metadata.create_all(bind=engine)
 
 # Static files (e.g., CSS, JS)
 app.mount("/static", StaticFiles(directory="app/frontend/static"), name="static")

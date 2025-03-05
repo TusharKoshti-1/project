@@ -12,18 +12,20 @@ router = APIRouter()
 def register_employee(
     request: Request,
     name: str = Form(...),
+    phone: str = Form(...),
     age: int = Form(...),
     gender: str = Form(...),
     department_name: str = Form(...),
     email: EmailStr = Form(...),
     password: str = Form(...),
-    face_file: UploadFile = File(None),  # Optional file upload
+    face_file: UploadFile = File(),  # Optional file upload
     db: Session = Depends(get_db),
 ):
     """Registers a new employee with optional profile image upload."""
     try:
         employee_data = EmployeeRegister(
             name=name,
+            phone=phone,
             age=age,
             gender=gender,
             department_name=department_name,
