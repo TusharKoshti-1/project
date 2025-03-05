@@ -37,32 +37,6 @@ async def test(request: Request):
     return templates.TemplateResponse("test.html", {"request": request})
 
 
-# Modify the dashboard route
-@router.get("/dashboard", response_class=HTMLResponse)
-async def dashboard(
-    request: Request,
-    db: Session = Depends(get_db)  # Add database dependency
-):
-    # Check if access token exists in cookies
-    access_token = request.cookies.get("access_token")
-    if not access_token:
-        return RedirectResponse(url="/login")
-    
-    # Verify the access token
-    payload = auth.verify_access_token(access_token)
-    if not payload:
-        return RedirectResponse(url="/login")
-    
-    # Check if user exists in the database
-    try:
-        user_email = payload.get("sub")
-        userservice.check_google_email(db, user_email)  # Verify user existence
-    except HTTPException:
-        return RedirectResponse(url="/login")
-    
-    # If all checks pass, show dashboard
-    return templates.TemplateResponse("dashboard.html", {"request": request})
-
 @router.get("/employee", response_class=HTMLResponse)
 async def employee_page(request: Request):
     """Employee page route."""

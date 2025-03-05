@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.sessions import SessionMiddleware
-from app.api.controllers import admin_controller, auth_controller,employee_controller, googlelogin_controller, page_controller
+from app.api.controllers import admin_controller, adminpages_controller, auth_controller,employee_controller, googlelogin_controller, page_controller
 from .config import CLIENT_ID, CLIENT_SECRET, Base, engine
 
 # Initialize FastAPI application
@@ -36,6 +36,7 @@ app.include_router(admin_controller.router, prefix="/admin")
 app.include_router(auth_controller.router, prefix="/auth")
 app.include_router(employee_controller.router, prefix="/employee")
 app.include_router(page_controller.router)
+app.include_router(adminpages_controller.router)
 app.include_router(googlelogin_controller.router)
 
 
