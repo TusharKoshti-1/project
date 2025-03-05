@@ -1,0 +1,105 @@
+/* Reset default styles to avoid interference */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+    border: none;
+}
+
+*:focus {
+    outline: none;
+}
+
+.main-container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f0f0f0;
+    padding: 20px;
+
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr)); /* Three columns to match the screenshot */
+    gap: 20px;
+    justify-items: center;
+    max-width: 900px; /* Adjusted to fit three cards comfortably */
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 5%;
+    margin-left: 22%;
+}
+
+.profile-card {
+    background:white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 16px;
+    padding: 15px;
+    width: 250px;
+    height: 300px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: none;
+}
+
+.profile-img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    background-color: #ccc;
+    object-fit: cover;
+    flex-shrink: 0;
+    border: none;
+}
+
+.profile-info {
+    font-size: 12px;
+    color: black;
+    margin: 5px 0;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding: 0 5px;
+    border: none;
+}
+
+.profile-info span {
+    border: none;
+    outline: none;
+    text-decoration: none;
+}
+
+h2 {
+    margin: 5px 0;
+    font-size: 16px;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 100%;
+    padding: 0 5px;
+    border: none;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns: repeat(2, minmax(250px, 1fr)); /* Two columns on medium screens */
+        max-width: 600px;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        grid-template-columns: 1fr; /* Stack in one column on small screens */
+        max-width: 300px;
+    }
+}
