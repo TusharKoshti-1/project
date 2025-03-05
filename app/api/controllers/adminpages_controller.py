@@ -65,3 +65,28 @@ async def profile(
     
     # If all checks pass, show profile
     return templates.TemplateResponse("profile.html", {"request": request})
+
+@router.get("/help", response_class=HTMLResponse)
+async def help(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = auth.verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        userservice.check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show help
+    return templates.TemplateResponse("help.html", {"request": request})
