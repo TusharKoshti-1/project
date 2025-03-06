@@ -21,3 +21,4 @@ facenet_pytorch
 uvicorn[standard]
 bcrypt
 supabase
+streamlit
