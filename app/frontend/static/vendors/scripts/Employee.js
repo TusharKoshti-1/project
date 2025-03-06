@@ -7,7 +7,7 @@ const employees = [
         id: "67890",
         email: "janesmith@example.com",
         phone: "+9876543210",
-        image: "vendors/images/photo1.jpg"
+        image: "/static/vendors/images/photo1.jpg"
     },
     {
         name: "John Doe",
@@ -16,7 +16,7 @@ const employees = [
         id: "12345",
         email: "johndoe@example.com",
         phone: "+1234567890",
-        image: "vendors/images/photo2.jpg"
+        image: "/static/vendors/images/photo2.jpg"
     },
     {
         name: "Alice Johnson",
@@ -25,7 +25,7 @@ const employees = [
         id: "24680",
         email: "alicej@example.com",
         phone: "+1122334455",
-        image: "vendors/images/photo3.jpg"
+        image: "/static/vendors/images/photo3.jpg"
     },
     {
         name: "Bob Wilson",
@@ -34,7 +34,7 @@ const employees = [
         id: "13579",
         email: "bobw@example.com",
         phone: "+9988776655",
-        image: "vendors/images/photo4.jpg"
+        image: "/static/vendors/images/photo4.jpg"
     },
     {
         name: "Jane Smith",
@@ -43,7 +43,7 @@ const employees = [
         id: "67890",
         email: "janesmith@example.com",
         phone: "+9876543210",
-        image: "vendors/images/photo1.jpg"
+        image: "/static/vendors/images/photo1.jpg"
     },
     {
         name: "John Doe",
@@ -52,7 +52,7 @@ const employees = [
         id: "12345",
         email: "johndoe@example.com",
         phone: "+1234567890",
-        image: "vendors/images/photo2.jpg"
+        image: "/static/vendors/images/photo2.jpg"
     },
     {
         name: "Alice Johnson",
@@ -61,7 +61,7 @@ const employees = [
         id: "24680",
         email: "alicej@example.com",
         phone: "+1122334455",
-        image: "vendors/images/photo3.jpg"
+        image: "/static/vendors/images/photo3.jpg"
     },
     {
         name: "Bob Wilson",
@@ -70,7 +70,7 @@ const employees = [
         id: "13579",
         email: "bobw@example.com",
         phone: "+9988776655",
-        image: "vendors/images/photo4.jpg"
+        image: "/static/vendors/images/photo4.jpg"
     }
 ];
 

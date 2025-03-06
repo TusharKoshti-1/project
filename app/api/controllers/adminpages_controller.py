@@ -90,3 +90,103 @@ async def help(
     
     # If all checks pass, show help
     return templates.TemplateResponse("help.html", {"request": request})
+
+@router.get("/employees", response_class=HTMLResponse)
+async def employess(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = auth.verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        userservice.check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show employee
+    return templates.TemplateResponse("employee.html", {"request": request})
+
+@router.get("/add-employee", response_class=HTMLResponse)
+async def add_employee(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = auth.verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        userservice.check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show add_employee
+    return templates.TemplateResponse("addEmployee.html", {"request": request})
+
+@router.get("/report", response_class=HTMLResponse)
+async def report(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = auth.verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        userservice.check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show report
+    return templates.TemplateResponse("report.html", {"request": request})
+
+@router.get("/aboutus", response_class=HTMLResponse)
+async def aboutus(
+    request: Request,
+    db: Session = Depends(get_db)  # Add database dependency
+):
+    # Check if access token exists in cookies
+    access_token = request.cookies.get("access_token")
+    if not access_token:
+        return RedirectResponse(url="/login")
+    
+    # Verify the access token
+    payload = auth.verify_access_token(access_token)
+    if not payload:
+        return RedirectResponse(url="/login")
+    
+    # Check if user exists in the database
+    try:
+        user_email = payload.get("sub")
+        userservice.check_google_email(db, user_email)  # Verify user existence
+    except HTTPException:
+        return RedirectResponse(url="/login")
+    
+    # If all checks pass, show aboutus
+    return templates.TemplateResponse("aboutUs.html", {"request": request})

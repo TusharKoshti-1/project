@@ -37,19 +37,6 @@ async def test(request: Request):
     return templates.TemplateResponse("test.html", {"request": request})
 
 
-@router.get("/employee", response_class=HTMLResponse)
-async def employee_page(request: Request):
-    """Employee page route."""
-    return templates.TemplateResponse("employee.html", {"request": request})
-
-
-@router.get("/add-employee", response_class=HTMLResponse)
-async def add_employee_page(request: Request):
-    """Add employee page route."""
-    return templates.TemplateResponse("add-employee.html", {"request": request})
-
-
-
 @router.get("/forgot-password", response_class=HTMLResponse)
 async def forgot_password(request: Request):
     """Forgot password page route."""

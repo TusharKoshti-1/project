@@ -4,7 +4,7 @@
 <head>
 	<!-- Basic Page Info -->
 	<meta charset="utf-8">
-	<title> Admin Dashboard </title>
+	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
 
 	<!-- Site favicon -->
 	<link rel="apple-touch-icon" sizes="180x180" href="/static/vendors/images/apple-touch-icon.png">
@@ -20,13 +20,8 @@
 	<!-- CSS -->
 	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/core.css">
 	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/src/plugins/jvectormap/jquery-jvectormap-2.0.3.css">
 	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
-
-	<!-- Chart-specific styles -->
-	 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
+	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/add employee.css">
 
 
 </head>
@@ -204,103 +199,56 @@
 	<div class="mobile-menu-overlay"></div>
 
 
-	<div class="main-container">
-		<div class="xs-pd-20-10 pd-ltr-20">
-			<div class="page-header">
-				<div class="row">
-					<div class="col-md-6 col-sm-12">
-						<div class="title">
-							<h4>Dashboard</h4>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="container mt-5">
-				<div class="row clearfix progress-box">
-					<!-- Total Employees -->
-					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-						<div class="card-box pd-30 height-100-p">
-							<div class="progress-box text-center">
-								<input type="text" class="knob knob1" value="100" data-width="120" data-height="120"
-									data-linecap="round" data-thickness="0.12" data-fgColor="#1b00ff"
-									data-angleOffset="180" readonly>
-								<h5 class="text-blue padding-top-10 h5">Total Employees</h5>
-								<span class="d-block">100%</span>
-							</div>
-						</div>
-					</div>
-					<!-- Business Captured -->
-					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-						<div class="card-box pd-30 height-100-p">
-							<div class="progress-box text-center">
-								<input type="text" class="knob knob2" value="70" data-width="120" data-height="120"
-									data-linecap="round" data-thickness="0.12" data-fgColor="#00e091"
-									data-angleOffset="180" readonly>
-								<h5 class="text-light-green padding-top-10 h5">Present Employees</h5>
-								<span class="d-block">75%</span>
-							</div>
-						</div>
-					</div>
-					<!-- Projects Speed -->
-					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-						<div class="card-box pd-30 height-100-p">
-							<div class="progress-box text-center">
-								<input type="text" class="knob knob3" value="90" data-width="120" data-height="120"
-									data-linecap="round" data-thickness="0.12" data-fgColor="#f56767"
-									data-angleOffset="180" readonly>
-								<h5 class="text-light-orange padding-top-10 h5">Absent Employees</h5>
-								<span class="d-block">35%</span>
-							</div>
-						</div>
-					</div>
-					<!-- Pending Orders -->
-					<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-						<div class="card-box pd-30 height-100-p">
-							<div class="progress-box text-center">
-								<input type="text" class="knob knob4" value="65" data-width="120" data-height="120"
-									data-linecap="round" data-thickness="0.12" data-fgColor="#1b00ff"
-									data-angleOffset="180" readonly>
-								<h5 class="text-light-purple padding-top-10 h5">Project Work</h5>
-								<span class="d-block">70%</span>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- Top Employees Attendance Chart Container -->
-				<div>
-				<div class="row clearfix progress-box">
-					<div class="col-12">
-						<div class="chart-container1">
-							<h5>Top 6 Employees by Attendance</h5>
-							<canvas id="topEmployeesChart"></canvas>
-						</div>
-					</div>
-				</div>
-				<!-- Top Employee Performance Chart Container -->
-				<div class="row clearfix progress-box">
-					<div class="col-12">
-						<div class="chart-container">
-							<h5>Top 6 Employee Performance</h5>
-							<canvas id="performanceChart"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
-			</div>
-		</div>
-	</div>
+	<!-- main container start -->
+<body>
+    <div class="main-container">
+        <div class="form-container">
+            <h2>Add Employee</h2>
+            <form id="employeeForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder=" " required>
+                    <label for="name">Name:</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="job" placeholder=" " required>
+                    <label for="job">Age:</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="department" placeholder=" " required>
+                    <label for="department">Gender:</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="id" placeholder=" " required>
+                    <label for="id">Department_Name:</label>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" placeholder=" " required>
+                    <label for="phone">Phone:</label>
+                </div>
+                <div class="form-group">
+                    <input type="url" id="image" placeholder=" ">
+                    <label for="image">Email:</label>
+                </div>
+				<div class="form-group">
+                    <input type="url" id="image" placeholder=" ">
+                    <label for="image">Password:</label>
+                </div>
+                <button type="submit">Add Employee</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem;">
+                <a href="/employees">View Employee Dashboard</a>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>
 	<!-- js -->
 	<script src="/static/vendors/scripts/core.js"></script>
 	<script src="/static/vendors/scripts/script.min.js"></script>
 	<script src="/static/vendors/scripts/process.js"></script>
 	<script src="/static/vendors/scripts/layout-settings.js"></script>
-	<script src="/static/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
-	<script src="/static/src/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="/static/src/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="/static/vendors/scripts/dashboard2.js"></script>
+	<script src="/static/vendors/scripts/add employee.js"></script>
 </body>
 
 </html>
