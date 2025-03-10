@@ -617,6 +617,7 @@ p {
     border-radius: 10px;
     -webkit-box-shadow: 0 0 28px rgba(0, 0, 0, .08);
     box-shadow: 0 0 28px rgba(0, 0, 0, .08)
+    
 }
 
 .card-img-top {
@@ -1368,6 +1369,41 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before, tabl
 
 .brand-logo a .dark-logo, .header-left .menu-icon, .header-left .search-toggle-icon, .sidebar-light .brand-logo a .light-logo, .sidebar-menu .submenu li.dropdown:before {
     display: none
+}
+.brand-logo {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.brand-logo a {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.brand-logo a img {
+    display: none;
+}
+
+.brand-logo a .dark-logo {
+    display: block;
+    width: 300px;
+    height: auto;
+    border-radius: 5px;
+    box-shadow: 0 0 20px #827f7f;
+    padding: 10px;
+    margin-left: -30px;
+}
+
+.close-sidebar {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.close-sidebar i {
+    font-size: 20px;
+    color: #fff; /* Assuming white for visibility on dark background */
 }
 
 .header-left .header-search {
@@ -2228,7 +2264,7 @@ body.IE .login-wrap .container, body.IE .register-page-wrap .container {
     border-radius: 10px;
     -webkit-box-shadow: 0 0 28px rgba(0, 0, 0, .08);
     box-shadow: 0 0 28px rgba(0, 0, 0, .08);
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     padding: 20px
 }
 
@@ -4634,7 +4670,7 @@ body.IE .login-wrap .container, body.IE .register-page-wrap .container {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    margin-left: -20px;
+    margin-left: 6px;
     margin-top: -20px;
     
 }
@@ -4653,7 +4689,7 @@ body.IE .login-wrap .container, body.IE .register-page-wrap .container {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin-top: -335px;
-    margin-right: -20px;
+    margin-right: 0px;
 }
 
 .chart-container canvas {
