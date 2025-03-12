@@ -1388,12 +1388,12 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before, tabl
 
 .brand-logo a .dark-logo {
     display: block;
-    width: 300px;
+    width: 161px;
     height: auto;
     border-radius: 5px;
     box-shadow: 0 0 20px #827f7f;
     padding: 10px;
-    margin-left: -30px;
+    margin-left: -65px;
 }
 
 .close-sidebar {

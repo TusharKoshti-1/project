@@ -136,7 +136,7 @@
 					</a>
 					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
 						<a class="dropdown-item" href="/profile"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="/help"><i class="dw dw-help"></i> Help</a>
+						<a class="dropdown-item" href="/aboutus"><i class="dw dw-help"></i> About Us</a>
 						<a class="dropdown-item" href="/login"><i class="dw dw-logout"></i> Log Out</a>
 					</div>
 				</div>
@@ -200,47 +200,89 @@
 
 
 	<!-- main container start -->
-<body>
-    <div class="main-container">
-        <div class="form-container">
-            <h2>Add Employee</h2>
-            <form id="employeeForm">
-                <div class="form-group">
-                    <input type="text" id="name" placeholder=" " required>
-                    <label for="name">Name:</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="job" placeholder=" " required>
-                    <label for="job">Age:</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="department" placeholder=" " required>
-                    <label for="department">Gender:</label>
-                </div>
-                <div class="form-group">
-                    <input type="text" id="id" placeholder=" " required>
-                    <label for="id">Department_Name:</label>
-                </div>
-                <div class="form-group">
-                    <input type="tel" id="phone" placeholder=" " required>
-                    <label for="phone">Phone:</label>
-                </div>
-                <div class="form-group">
-                    <input type="url" id="image" placeholder=" ">
-                    <label for="image">Email:</label>
-                </div>
-				<div class="form-group">
-                    <input type="url" id="image" placeholder=" ">
-                    <label for="image">Password:</label>
-                </div>
-                <button type="submit">Add Employee</button>
-            </form>
-            <p style="text-align: center; margin-top: 1rem;">
-                <a href="/employees">View Employee Dashboard</a>
-            </p>
-        </div>
-    </div>
 
+    <div class="main-container">
+		<div class="form-container">
+			<h2>Add Employee</h2>
+			<form id="employeeForm" enctype="multipart/form-data">
+				<!-- New Form Fields Added -->
+				<div class="form-group">
+					<input type="text" id="name" placeholder=" " required>
+					<label for="name">Name:</label>
+				</div>
+				<div class="form-group">
+					<input type="tel" id="phone" placeholder=" " required>
+					<label for="phone">Phone:</label>
+				</div>
+				<div class="form-group">
+					<input type="text" id="job" placeholder=" " required>
+					<label for="job">Age:</label>
+				</div>
+				<div class="form-group">
+					<input type="text" id="department" placeholder=" " required>
+					<label for="department">Gender:</label>
+				</div>
+				<div class="form-group">
+					<input type="text" id="id" placeholder=" " required>
+					<label for="id">Department Name:</label>
+				</div>
+				
+				<div class="form-group">
+					<input type="tel" id="phone" placeholder=" " required>
+					<label for="phone">Email:</label>
+				</div>
+				<div class="form-group">
+					<input type="tel" id="phone" placeholder=" " required>
+					<label for="phone">Password:</label>
+				</div>
+	
+				<!-- Image Upload with Multiple Preview -->
+				<div class="form-group">
+					<input type="file" id="profileImage" accept="image/*" multiple onchange="previewImages(event)">
+					<label for="profileImage">Profile Images:</label>
+				</div>
+				
+				<div class="image-preview" id="imagePreviewContainer" 
+					 style="display: flex; flex-wrap: wrap; gap: 10px;">
+				</div>
+	
+				<button type="submit">Add Employee</button>
+			</form>
+			
+			<p style="text-align: center; margin-top: 1rem;">
+				<a href="/employees">View Employee Dashboard</a>
+			</p>
+		</div>
+	</div>
+	
+	<script>
+	function previewImages(event) {
+		const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+		imagePreviewContainer.innerHTML = ''; // Clear previous images
+	
+		const files = event.target.files;
+	
+		if (files.length > 0) {
+			Array.from(files).forEach(file => {
+				if (file && file.type.startsWith('image/')) {
+					const reader = new FileReader();
+					reader.onload = function(e) {
+						const imgElement = document.createElement('img');
+						imgElement.src = e.target.result;
+						imgElement.style.maxWidth = '100px';
+						imgElement.style.height = 'auto';
+						imgElement.style.border = '1px solid #ddd';
+						imgElement.style.borderRadius = '8px';
+						imgElement.style.padding = '5px';
+						imagePreviewContainer.appendChild(imgElement);
+					};
+					reader.readAsDataURL(file);
+				}
+			});
+		}
+	}
+	</script>
+	
 </body>
 </html>
 	<!-- js -->

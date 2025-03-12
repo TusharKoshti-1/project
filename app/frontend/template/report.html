@@ -1,558 +1,682 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<!-- Basic Page Info -->
-	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8">
+    <title>DeskApp - Admin Employee Report</title>
 
-	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="/static/vendors/images/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/static/vendors/images/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/static/vendors/images/favicon-16x16.png">
+    <!-- Site favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/vendors/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/vendors/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/static/vendors/images/favicon-16x16.png">
 
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Mobile Specific Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/src/plugins/jquery-steps/jquery.steps.css">
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/static/vendors/styles/core.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/src/plugins/jquery-steps/jquery.steps.css">
+    <link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
 
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+    <!-- Custom Styles -->
+    <style>
+        .report-container {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        }
 
-		gtag('config', 'UA-119386393-1');
-	</script>
+        .employee-sidebar {
+            flex: 1;
+            min-width: 250px;
+            padding: 20px;
+            background: linear-gradient(135deg, #0078d4, #00bcd4);
+            color: white;
+            border-radius: 12px 0 0 12px;
+        }
+
+        .employee-sidebar h2 {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            text-align: center;
+		
+        }
+
+        .employee-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-item {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .filter-group {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input[type="date"] {
+            padding: 10px;
+            font-size: 14px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #2c3e50;
+            cursor: pointer;
+        }
+
+        .filter-group select {
+            appearance: none;
+            background-image: url('data:image/svg+xml;utf8,<svg fill="%232c3e50" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+        }
+
+        #apply-btn {
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            background-color: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #apply-btn:hover {
+            background-color: #1e3a8a;
+            transform: translateY(-2px);
+        }
+
+        .report-content {
+            flex: 3;
+            padding: 20px;
+            min-width: 0;
+        }
+
+        .metrics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metrics-left, .metrics-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            min-width: 200px;
+        }
+
+        .metric-card {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid;
+        }
+
+        .metric-card span {
+            font-size: 20px;
+            font-weight: 600;
+            display: block;
+            margin-top: 5px;
+        }
+
+        .metric-card.work-hours { border-color: #16a34a; background-color: #f0fdf4; }
+        .metric-card.tasks-completed { border-color: #1e40af; background-color: #eff6ff; }
+        .metric-card.attendance { border-color: #d97706; background-color: #fff7ed; }
+        .metric-card.performance-score { border-color: #e11d48; background-color: #fff1f2; }
+
+        .chart-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .attendance-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .attendance-table th, .attendance-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .attendance-table th {
+            background-color: #f1f5f9;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .attendance-table tr:last-child td {
+            border-bottom: none;
+        }
+		#paginator {
+    text-align: center;
+    margin-top: 20px;
+}
+
+#paginator button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 0 2px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    color: #333;
+    cursor: pointer;
+}
+
+#paginator button:hover {
+    background-color: #e5e5e5;
+}
+
+        @media (max-width: 768px) {
+            .report-container { flex-direction: column; }
+            .employee-sidebar { border-radius: 12px 12px 0 0; }
+            .report-content { padding: 15px; }
+            .metrics-left, .metrics-right { flex: none; width: 100%; }
+        }
+    </style>
 </head>
 <body class="header-white sidebar-light">
 
-	<div class="header">
-		<div class="header-left">
-			<div class="menu-icon dw dw-menu"></div>
-			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
-			<div class="header-search">
-				<form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="header-right">
-			<!-- <div class="dashboard-setting user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-						<i class="dw dw-settings2"></i>
-					</a>
-				</div>
-			</div> -->
-			<div class="user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-						<i class="icon-copy dw dw-notification"></i>
-						<span class="badge notification-active"></span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<div class="notification-list mx-h-350 customscroll">
-							<ul>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Het patel</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Bhupendra Parmar</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Tusar Koshti</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Bhavya Pandya</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Shubham Chobey</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="user-info-dropdown">
-				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-						<span class="user-icon">
-							<img src="/static/vendors/images/photo1.jpg" alt="">
-						</span>
-						<span class="user-name">Mayank Parmar</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="/profile"><i class="dw dw-user1"></i> Profile</a>
-						<a class="dropdown-item" href="/help"><i class="dw dw-help"></i> Help</a>
-						<a class="dropdown-item" href="/login"><i class="dw dw-logout"></i> Log Out</a>
-					</div>
-				</div>
-			</div>
+    <div class="header">
+        <!-- DeskApp Header (unchanged) -->
+        <div class="header-left">
+            <div class="menu-icon dw dw-menu"></div>
+            <div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
+            <div class="header-search">
+                <form>
+                    <div class="form-group mb-0">
+                        <i class="dw dw-search2 search-icon"></i>
+                        <input type="text" class="form-control search-input" placeholder="Search Here">
+                        <div class="dropdown">
+                            <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                                <i class="ion-arrow-down-c"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">From</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">To</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-12 col-md-2 col-form-label">Subject</label>
+                                    <div class="col-sm-12 col-md-10">
+                                        <input class="form-control form-control-sm form-control-line" type="text">
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <button class="btn btn-primary">Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="user-notification">
+                <div class="dropdown">
+                    <a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
+                        <i class="icon-copy dw dw-notification"></i>
+                        <span class="badge notification-active"></span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <div class="notification-list mx-h-350 customscroll">
+                            <ul>
+                                <li><a href="#"><img src="/static/vendors/images/photo1.jpg" alt=""><h3>Het Patel</h3><p>Lorem ipsum...</p></a></li>
+                                <li><a href="#"><img src="/static/vendors/images/photo1.jpg" alt=""><h3>Bhupendra Parmar</h3><p>Lorem ipsum...</p></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-info-dropdown">
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
+                        <span class="user-icon"><img src="/static/vendors/images/photo1.jpg" alt=""></span>
+                        <span class="user-name">Mayank Parmar</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
+                        <a class="dropdown-item" href="/profile"><i class="dw dw-user1"></i> Profile</a>
+                        <a class="dropdown-item" href="/aboutus"><i class="dw dw-help"></i> About Us</a>
+                        <a class="dropdown-item" href="/login"><i class="dw dw-logout"></i> Log Out</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-		</div>
-	</div>
+    <div class="left-side-bar">
+        <!-- DeskApp Sidebar (unchanged) -->
+        <div class="brand-logo">
+            <a href="/dashboard">
+                <img src="/static/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
+                <img src="/static/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
+            </a>
+            <div class="close-sidebar" data-toggle="left-sidebar-close">
+                <i class="ion-close-round"></i>
+            </div>
+        </div>
+        <div class="menu-block customscroll">
+            <div class="sidebar-menu">
+                <ul id="accordion-menu">
+                    <li><a href="/dashboard" class="dropdown-toggle no-arrow"><span class="micon dw dw-home"></span><span class="mtext">Home</span></a></li>
+                    <li class="dropdown">
+                        <a href="javascript:;" class="dropdown-toggle"><span class="micon dw dw-user1"></span><span class="mtext">Employee</span></a>
+                        <ul class="submenu">
+                            <li><a href="/employees">Employee detail</a></li>
+                            <li><a href="/add-employee">Add Employee</a></li>
+                            <li><a href="/report">Report</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/profile" class="dropdown-toggle no-arrow"><span class="micon dw dw-settings2"></span><span class="mtext">Settings</span></a></li>
+                    <li><a href="/aboutus" class="dropdown-toggle no-arrow"><span class="micon dw dw-help"></span><span class="mtext">About Us</span></a></li>
+                    <li><a href="/login" class="dropdown-toggle no-arrow"><span class="micon dw dw-logout1"></span><span class="mtext">Logout</span></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="mobile-menu-overlay"></div>
 
-	<div class="left-side-bar">
-		<div class="brand-logo">
-			<a href="/dashboard">
-				<img src="/static/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
-				<img src="/static/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
-			</a>
-			<div class="close-sidebar" data-toggle="left-sidebar-close">
-				<i class="ion-close-round"></i>
-			</div>
-		</div>
-		<div class="menu-block customscroll">
-			<div class="sidebar-menu">
-				<ul id="accordion-menu">
+    <div class="main-container">
+        <div class="pd-ltr-20 xs-pd-20-10">
+            <div class="min-height-200px">
+                <div class="pd-20 card-box mb-30">
+                    <div class="clearfix">
+                        <h4 class="text-blue h4"> Employee Report</h4>
+                        <p class="mb-30">Performance and Attendance Overview</p>
+                    </div>
+                    <div class="report-container">
+                        <!-- Employee Sidebar (Left) -->
+                        <aside class="employee-sidebar">
+                            <h2>Employee Details</h2>
+                            <div class="employee-details" id="employee-details">
+                                <div class="detail-item"><label>ID:</label> <span id="emp-id">EMP001</span></div>
+                                <div class="detail-item"><label>Name:</label> <span id="emp-name">Jane Smith</span></div>
+                                <div class="detail-item"><label>Role:</label> <span id="emp-role">Developer</span></div>
+                                <div class="detail-item"><label>Email:</label> <span id="emp-email">jane.smith@company.com</span></div>
+                            </div>
+                            <div class="filter-group">
+                                <label for="employee-select">Select Employee:</label>
+                                <select id="employee-select">
+                                    <option value="jane_smith" selected>Jane Smith</option>
+                                    <option value="john_doe">John Doe</option>
+                                </select>
+                                <label for="date-picker">Select Date:</label>
+                                <input type="date" id="date-picker" value="2025-03-09" min="2025-01-01" max="2025-12-31">
+                                <button id="apply-btn">Apply Filters</button>
+                            </div>
+                        </aside>
 
-					<li>
-						<a href="/dashboard" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-home"></span><span class="mtext">Home</span>
-						</a>
-					</li>
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-user1"></span><span class="mtext">Employee</span>
+                        <!-- Report Content (Right) -->
+                        <main class="report-content">
+                            <!-- Metrics -->
+                            <section class="metrics" id="metrics-section">
+                                <div class="metrics-left">
+                                    <div class="metric-card work-hours">Work Hours: <span id="work-hours">40 hrs</span></div>
+                                    <div class="metric-card tasks-completed">Tasks Completed: <span id="tasks-completed">15</span></div>
+                                </div>
+                                <div class="metrics-right">
+                                    <div class="metric-card attendance">Attendance: <span id="attendance">95%</span></div>
+                                    <div class="metric-card performance-score">Performance Score: <span id="performance-score">88%</span></div>
+                                </div>
+                            </section>
 
-						</a>
-						<ul class="submenu">
-							<li><a href="/employees">Employee detail</a></li>
-							<li><a href="/add-employee">Add Employee</a></li>
-							<li><a href="/report">Report</a></li>
+                            <!-- Performance Chart -->
+                            <section class="chart-container">
+                                <canvas id="performanceChart"></canvas>
+                            </section>
 
-						</ul>
-					</li>
-					<li>
-						<a href="/profile" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-settings2"></span><span class="mtext">Settings</span>
-						</a>
-					</li>
-					<li>
-						<a href="/aboutus" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-help"></span><span class="mtext">About Us</span>
-						</a>
-					</li>
-					
-					<li>
-						<a href="/login" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-logout1"></span><span class="mtext">Logout</span>
-						</a>
+                            <!-- Attendance Table -->
+							Collapse
 
-				</ul>
-			</div>
-		</div>
-	</div>
-	<div class="mobile-menu-overlay"></div>
+							Wrap
+							
+							Copy
+							<table class="attendance-table" id="attendance-table">
+								<thead>
+									<tr>
+										<th>Date</th>
+										<th>Status</th>
+										<th>Hours Worked</th>
+									</tr>
+								</thead>
+								<tbody id="attendance-table-body">
+									<tr>
+										<td>March 6, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 7, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 8, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 6, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 7, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 8, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 6, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 7, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 8, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 6, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 7, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+									<tr>
+										<td>March 8, 2025</td>
+										<td>Present</td>
+										<td>8h</td>
+									</tr>
+								</tbody>
+							</table>
+							<div id="paginator"></div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-	<div class="main-container">
-		<div class="pd-ltr-20 xs-pd-20-10">
-			<div class="min-height-200px">
-				<!-- <div class="page-header">
-					<div class="row">
-						<div class="col-md-6 col-sm-12">
-							<div class="title">
-								<h4>Form Wizards</h4>
-							</div>
-							<nav aria-label="breadcrumb" role="navigation">
-								<ol class="breadcrumb">
-									<li class="breadcrumb-item"><a href="index.html">Home</a></li>
-									<li class="breadcrumb-item active" aria-current="page">Form Wizards</li>
-								</ol>
-							</nav>
-						</div>
-						<div class="col-md-6 col-sm-12 text-right">
-							<div class="dropdown">
-								<a class="btn btn-primary dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-									January 2018
-								</a>
-								<div class="dropdown-menu dropdown-menu-right">
-									<a class="dropdown-item" href="#">Export List</a>
-									<a class="dropdown-item" href="#">Policies</a>
-									<a class="dropdown-item" href="#">View Assets</a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div> -->
+    <!-- JS -->
+    <script src="/static/vendors/scripts/core.js"></script>
+    <script src="/static/vendors/scripts/script.min.js"></script>
+    <script src="/static/vendors/scripts/process.js"></script>
+    <script src="/static/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/src/plugins/jquery-steps/jquery.steps.js"></script>
+    <script src="/static/vendors/scripts/steps-setting.js"></script>
 
-				<!-- <div class="pd-20 card-box mb-30">
-					<div class="clearfix">
-						<h4 class="text-blue h4">Step wizard</h4>
-						<p class="mb-30">jQuery Step wizard</p>
-					</div>
-					<div class="wizard-content">
-						<form class="tab-wizard wizard-circle wizard">
-							<h5>Personal Info</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >First Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >Last Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Email Address :</label>
-											<input type="email" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Phone Number :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Select City :</label>
-											<select class="custom-select form-control">
-												<option value="">Select City</option>
-												<option value="Amsterdam">India</option>
-												<option value="Berlin">UK</option>
-												<option value="Frankfurt">US</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >Date of Birth :</label>
-											<input type="text" class="form-control date-picker" placeholder="Select Date">
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 2 -->
-							<!-- <h5>Job Status</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Job Title :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Company Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<label>Job Description :</label>
-											<textarea class="form-control"></textarea>
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 3 -->
-							<!-- <h5>Interview</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Interview For :</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Interview Type :</label>
-											<select class="form-control">
-												<option>Normal</option>
-												<option>Difficult</option>
-												<option>Hard</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Interview Date :</label>
-											<input type="text" class="form-control date-picker" placeholder="Select Date">
-										</div>
-										<div class="form-group">
-											<label>Interview Time :</label>
-											<input class="form-control time-picker" placeholder="Select time" type="text">
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 4 -->
-							<!-- <h5>Remark</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Behaviour :</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Confidance</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Result</label>
-											<select class="form-control">
-												<option>Select Result</option>
-												<option>Selected</option>
-												<option>Rejected</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Comments</label>
-											<textarea class="form-control"></textarea>
-										</div>
-									</div>
-								</div>
-							</section>
-						</form>
-					</div>
-				</div> -->
+    <!-- Custom Script -->
+    <script>
 
-				<!-- <div class="pd-20 card-box mb-30">
-					<div class="clearfix">
-						<h4 class="text-blue h4">Step wizard vertical</h4>
-						<p class="mb-30">jQuery Step wizard</p>
-					</div>
-					<div class="wizard-content">
-						<form class="tab-wizard wizard-circle wizard vertical">
-							<h5>Personal Info</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >First Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >Last Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Email Address :</label>
-											<input type="email" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Phone Number :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Select City :</label>
-											<select class="custom-select form-control">
-												<option value="">Select City</option>
-												<option value="Amsterdam">India</option>
-												<option value="Berlin">UK</option>
-												<option value="Frankfurt">US</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label >Date of Birth :</label>
-											<input type="text" class="form-control date-picker" placeholder="Select Date">
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 2 -->
-							<!-- <h5>Job Status</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Job Title :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Company Name :</label>
-											<input type="text" class="form-control">
-										</div>
-									</div>
-									<div class="col-md-12">
-										<div class="form-group">
-											<label>Job Description :</label>
-											<textarea class="form-control"></textarea>
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 3 -->
-							<!-- <h5>Interview</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Interview For :</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Interview Type :</label>
-											<select class="form-control">
-												<option>Normal</option>
-												<option>Difficult</option>
-												<option>Hard</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Interview Date :</label>
-											<input type="text" class="form-control date-picker" placeholder="Select Date">
-										</div>
-										<div class="form-group">
-											<label>Interview Time :</label>
-											<input class="form-control time-picker" placeholder="Select time" type="text">
-										</div>
-									</div>
-								</div>
-							</section> -->
-							<!-- Step 4 -->
-							<!-- <h5>Remark</h5>
-							<section>
-								<div class="row">
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Behaviour :</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Confidance</label>
-											<input type="text" class="form-control">
-										</div>
-										<div class="form-group">
-											<label>Result</label>
-											<select class="form-control">
-												<option>Select Result</option>
-												<option>Selected</option>
-												<option>Rejected</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-md-6">
-										<div class="form-group">
-											<label>Comments</label>
-											<textarea class="form-control"></textarea>
-										</div>
-									</div>
-								</div>
-							</section>
-						</form>
-					</div>
-				</div> -->
+   var tableBody = document.getElementById('attendance-table-body');
+    var rows = tableBody.rows;
+    var pageSize = 5;
+    var numPages = Math.ceil(rows.length / pageSize);
+    var currentPage = 1;
 
-				<!-- success Popup html Start -->
-				<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-					<div class="modal-dialog modal-dialog-centered" role="document">
-						<div class="modal-content">
-							<div class="modal-body text-center font-18">
-								<h3 class="mb-20">Form Submitted!</h3>
-								<div class="mb-30 text-center"><img src="vendors/images/success.png"></div>
-								Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-							</div>
-							<div class="modal-footer justify-content-center">
-								<button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- success Popup html End -->
-			</div>
-			<!-- <div class="footer-wrap pd-20 mb-20 card-box">
-				DeskApp - Bootstrap 4 Admin Template By <a href="https://github.com/dropways" target="_blank">Ankit Hingarajiya</a>
-			</div> -->
-		</div>
-	</div>
-	<!-- js -->
-	<script src="/static/vendors/scripts/core.js"></script>
-	<script src="/static/vendors/scripts/script.min.js"></script>
-	<script src="/static/vendors/scripts/process.js"></script>
-	<script src="/static/vendors/scripts/layout-settings.js"></script>
-	<script src="/static/src/plugins/jquery-steps/jquery.steps.js"></script>
-	<script src="/static/vendors/scripts/steps-setting.js"></script>
+    function showPage(pageNumber) {
+        currentPage = pageNumber;
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].style.display = 'none';
+        }
+        var start = (pageNumber - 1) * pageSize;
+        var end = start + pageSize;
+        for (var i = start; i < end && i < rows.length; i++) {
+            rows[i].style.display = '';
+        }
+    }
+
+    var paginator = document.getElementById('paginator');
+    var prevButton = document.createElement('button');
+    prevButton.innerHTML = 'Previous';
+    prevButton.addEventListener('click', function() {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+        }
+    });
+    paginator.appendChild(prevButton);
+
+    for (var i = 1; i <= numPages; i++) {
+        var button = document.createElement('button');
+        button.innerHTML = i;
+        button.addEventListener('click', function(page) {
+            return function() {
+                showPage(page);
+            };
+        }(i));
+        paginator.appendChild(button);
+    }
+
+    var nextButton = document.createElement('button');
+    nextButton.innerHTML = 'Next';
+    nextButton.addEventListener('click', function() {
+        if (currentPage < numPages) {
+            currentPage++;
+            showPage(currentPage);
+        }
+    });
+    paginator.appendChild(nextButton);
+
+    showPage(1);
+
+
+       // Employee data with multiple dates
+const employeeData = {
+    "jane_smith_2025-03-09": {
+        details: { id: "EMP001", name: "Jane Smith", role: "Developer", email: "jane.smith@company.com" },
+        metrics: { workHours: "40 hrs", tasksCompleted: "15", attendance: "95%", performanceScore: "88%" },
+        chart: [85, 87, 88, 90, 85, 92, 89, 88, 87],
+        attendance: [
+            ["March 1, 2025", "Present", "8h"],
+            ["March 2, 2025", "Present", "8h"],
+            ["March 3, 2025", "Present", "8h"],
+            ["March 4, 2025", "Present", "8h"],
+            ["March 5, 2025", "Present", "8h"],
+            ["March 6, 2025", "Present", "8h"],
+            ["March 7, 2025", "Present", "8h"],
+            ["March 8, 2025", "Present", "8h"],
+            ["March 9, 2025", "Present", "8h"]
+        ]
+    },
+    
+    "john_doe_2025-03-09": {
+        details: { id: "EMP002", name: "John Doe", role: "Support", email: "john.doe@company.com" },
+        metrics: { workHours: "35 hrs", tasksCompleted: "12", attendance: "90%", performanceScore: "85%" },
+        chart: [80, 82, 85, 87, 88, 86, 85, 84, 85],
+        attendance: [
+            ["March 1, 2025", "Present", "8h"],
+            ["March 2, 2025", "Present", "8h"],
+            ["March 3, 2025", "Present", "8h"],
+            ["March 4, 2025", "Present", "8h"],
+            ["March 5, 2025", "Present", "8h"],
+            ["March 6, 2025", "Present", "8h"],
+            ["March 7, 2025", "Present", "8h"],
+            ["March 8, 2025", "Present", "8h"],
+            ["March 9, 2025", "Present", "8h"]
+        ]
+    },
+    "john_doe_2025-03-10": {
+        details: { id: "EMP002", name: "John Doe", role: "Support", email: "john.doe@company.com" },
+        metrics: { workHours: "38 hrs", tasksCompleted: "14", attendance: "92%", performanceScore: "87%" },
+        chart: [82, 84, 86, 88, 89, 87, 86, 85, 87],
+        attendance: [
+            ["March 2, 2025", "Present", "8h"],
+            ["March 3, 2025", "Present", "8h"],
+            ["March 4, 2025", "Present", "8h"],
+            ["March 5, 2025", "Present", "8h"],
+            ["March 6, 2025", "Present", "8h"],
+            ["March 7, 2025", "Present", "8h"],
+            ["March 8, 2025", "Present", "8h"],
+            ["March 9, 2025", "Present", "8h"],
+            ["March 10, 2025", "Present", "6h"]
+        ]
+    }
+};
+
+// Function to update chart (placeholder - replace with your charting library logic, e.g., Chart.js)
+function updateChart(chartData) {
+    console.log("Chart Data:", chartData);
+    // Example: If using Chart.js, update the chart here
+    // const ctx = document.getElementById('performance-chart').getContext('2d');
+    // new Chart(ctx, { type: 'line', data: { labels: [...], datasets: [{ data: chartData }] } });
+}
+
+// Function to generate Zoho Cliq report
+function generateCliqReport(selectedData, employee, date) {
+    return {
+        text: `Performance Report for ${selectedData.details.name} on ${date}`,
+        card: {
+            title: `${selectedData.details.name} - ${selectedData.details.role}`,
+            theme: "modern"
+        },
+        slides: [
+            {
+                title: "Employee Details",
+                data: [
+                    { "ID": selectedData.details.id },
+                    { "Email": selectedData.details.email }
+                ]
+            },
+            {
+                title: "Metrics",
+                data: [
+                    { "Work Hours": selectedData.metrics.workHours },
+                    { "Tasks Completed": selectedData.metrics.tasksCompleted },
+                    { "Attendance": selectedData.metrics.attendance },
+                    { "Performance Score": selectedData.metrics.performanceScore }
+                ]
+            }
+        ]
+    };
+}
+
+// Event listener for the apply button
+document.addEventListener('DOMContentLoaded', () => {
+    const applyBtn = document.getElementById('apply-btn');
+    if (!applyBtn) {
+        console.error("Apply button not found!");
+        return;
+    }
+
+    applyBtn.addEventListener('click', () => {
+        const employeeSelect = document.getElementById('employee-select');
+        const datePicker = document.getElementById('date-picker');
+
+        if (!employeeSelect || !datePicker) {
+            alert("Employee select or date picker element not found!");
+            return;
+        }
+
+        const employee = employeeSelect.value;
+        const date = datePicker.value;
+        const key = `${employee}_${date}`;
+        const selectedData = employeeData[key];
+
+        if (!selectedData) {
+            alert(`No data available for ${employee} on ${date}.`);
+            return;
+        }
+
+        try {
+            // Update Employee Details
+            document.getElementById('emp-id').textContent = selectedData.details.id || "N/A";
+            document.getElementById('emp-name').textContent = selectedData.details.name || "N/A";
+            document.getElementById('emp-role').textContent = selectedData.details.role || "N/A";
+            document.getElementById('emp-email').textContent = selectedData.details.email || "N/A";
+
+            // Update Metrics
+            document.getElementById('work-hours').textContent = selectedData.metrics.workHours || "N/A";
+            document.getElementById('tasks-completed').textContent = selectedData.metrics.tasksCompleted || "N/A";
+            document.getElementById('attendance').textContent = selectedData.metrics.attendance || "N/A";
+            document.getElementById('performance-score').textContent = selectedData.metrics.performanceScore || "N/A";
+
+            // Update Chart
+            updateChart(selectedData.chart);
+
+            // Update Attendance Table
+            const tbody = document.getElementById('attendance-table-body');
+            if (!tbody) {
+                console.error("Attendance table body not found!");
+                return;
+            }
+            tbody.innerHTML = ''; // Clear existing rows
+            selectedData.attendance.forEach(row => {
+                const tr = document.createElement('tr');
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+
+            // Generate and log Zoho Cliq JSON
+            const cliqReport = generateCliqReport(selectedData, employee, date);
+            console.log("Zoho Cliq Report JSON:", JSON.stringify(cliqReport, null, 2));
+        } catch (error) {
+            console.error("Error updating report:", error);
+            alert("An error occurred while generating the report.");
+        }
+    });
+});
+    </script>
 </body>
 </html>
