@@ -29,6 +29,40 @@
 		gtag('js', new Date());
 		gtag('config', 'UA-119386393-1');
 	</script>
+	<!-- In otp_verification.html -->
+	<!-- <form id="otp-form"> -->
+		<!-- ... your OTP inputs ... -->
+		<!-- <div class="row align-items-center mt-4">
+			<div class="col-5">
+				<div class="input-group mb-0">
+					<button type="submit" class="btn btn-primary btn-lg btn-block">Verify</button>
+				</div>
+			</div> -->
+			<!-- ... rest of your form ... -->
+	<!-- </form>
+
+	<script>
+	document.getElementById("otp-form").addEventListener("submit", async function(event) {
+		event.preventDefault();
+		const otp = Array.from(document.querySelectorAll('.otp-input'))
+					.map(input => input.value)
+					.join('');
+		
+		const response = await fetch("/api/verify-otp", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ otp }),
+			credentials: 'include'  // Important for sessions
+		});
+		
+		if (response.ok) {
+			window.location.href = "/reset-password";
+		} else {
+			const error = await response.json();
+			alert(error.detail || "Invalid OTP");
+		}
+	});
+	</script> -->
 </head>
 
 <body>

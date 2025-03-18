@@ -42,6 +42,10 @@ async def forgot_password(request: Request):
     """Forgot password page route."""
     return templates.TemplateResponse("forgot-password.html", {"request": request})
 
+@router.get("/otp_verify", response_class=HTMLResponse)
+async def forgot_password(request: Request):
+    """otp verifiaction page route."""
+    return templates.TemplateResponse("otp_verification.html", {"request": request})
 
 @router.get("/reset-password", response_class=HTMLResponse)
 async def reset_password(request: Request):
