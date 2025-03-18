@@ -9,6 +9,7 @@ from app.api.controllers import (
     adminpages_controller,
     auth_controller,
     employee_controller,
+    employeepage_controller,
     googlelogin_controller,
     page_controller,
     productivity_controller,
