@@ -168,3 +168,11 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+#certificates
+.pem 
+#ignore env files
+.env
+.crt
+ca.pem

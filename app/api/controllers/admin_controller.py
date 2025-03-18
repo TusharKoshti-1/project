@@ -1,9 +1,9 @@
+# app/api/controllers/admin_controller.py
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.api.service.user_service import UserService
-from app.config import get_db
+from app.dependencies import get_db  # Correct import
 from app.api.utils.auth_utils import AuthUtils
-
 
 auth = AuthUtils()
 userservice = UserService()

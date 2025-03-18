@@ -1,22 +1,24 @@
+# app/api/controllers/googlelogin_controller.py
 import secrets
 import logging
 from datetime import timedelta
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
-from starlette.middleware.sessions import SessionMiddleware
 from authlib.integrations.starlette_client import OAuth, OAuthError
-from requests import Session
+from sqlalchemy.orm import Session
 from app.api.service.user_service import UserService
 from app.api.utils.auth_utils import AuthUtils
-from app.config import CLIENT_ID, CLIENT_SECRET, get_db
+from app.api.utils.monitor_utils import start_recognition_and_monitoring
+from app.config import CLIENT_ID, CLIENT_SECRET
+from app.dependencies import get_db
 
-router = APIRouter()
+router = APIRouter(prefix="/google")
 auth = AuthUtils()
 userservice = UserService()
+logger = logging.getLogger(__name__)
 
-# Templates folder for Jinja2
 templates = Jinja2Templates(directory="app/frontend/template")
 
 oauth = OAuth()
@@ -27,88 +29,102 @@ oauth.register(
     client_secret=CLIENT_SECRET,
     client_kwargs={
         "scope": "email openid profile",
-        'redirect_url': 'http://localhost:8000/auth/callback'
+        "redirect_url": "http://localhost:8000/auth/callback",
     },
 )
 
 
-@router.get("/googlelogin")
+@router.get("/login")
 async def login(request: Request):
-    # Generate a random state to prevent CSRF attacks
     state = secrets.token_urlsafe()
-    request.session['oauth_state'] = state  # Store state in session
-
-    # Redirect user to Google's OAuth authorization endpoint
-    url = request.url_for('auth')  # The callback URL for OAuth
+    request.session["oauth_state"] = state
+    url = request.url_for("auth")
     return await oauth.google.authorize_redirect(request, url, state=state)
 
+
 @router.get("/auth")
-async def auth(request: Request, db: Session = Depends(get_db)):
-    stored_state = request.session.get('oauth_state')
-    received_state = request.query_params.get('state')
+async def auth(
+    request: Request,
+    db: Session = Depends(get_db),
+    background_tasks: BackgroundTasks = None,  # Fixed from BackgroundTasks()
+):
+    stored_state = request.session.get("oauth_state")
+    received_state = request.query_params.get("state")
 
     if stored_state != received_state:
-        logging.error(f"State mismatch: stored {stored_state}, received {received_state}")
+        logger.error(
+            f"State mismatch: stored {stored_state}, received {received_state}"
+        )
         return templates.TemplateResponse(
-            'error.html',
-            context={'request': request, 'error': "State mismatch, possible CSRF attack."}
+            "error.html",
+            context={
+                "request": request,
+                "error": "State mismatch, possible CSRF attack.",
+            },
         )
 
     try:
         token = await oauth.google.authorize_access_token(request)
     except OAuthError as e:
-        logging.error(f"OAuthError: {e.error}")
+        logger.error(f"OAuthError: {e.error}")
         return templates.TemplateResponse(
-            'error.html',
-            context={'request': request, 'error': f"OAuthError: {e.error}"}
+            "error.html",
+            context={"request": request, "error": f"OAuthError: {e.error}"},
         )
-    
-    logging.info(f"Token: {token}")
-    user_info = token.get('userinfo')
-    logging.info(f"User Info: {user_info}")
 
-    if user_info:
-        email = user_info.get('email')
+    user_info = token.get("userinfo")
+    if not user_info:
+        return templates.TemplateResponse(
+            "error.html",
+            context={
+                "request": request,
+                "error": "Failed to retrieve user information.",
+            },
+        )
 
+    email = user_info.get("email")
+    user = userservice.check_google_email(db, email)
+    if not user:
+        logger.error(f"User {email} not found in database")
+        return templates.TemplateResponse(
+            "error.html",
+            context={"request": request, "error": "User not found."},
+        )
+
+    # Start recognition and monitoring only if user is an employee (role_id = 1)
+    employee_id = None
+    if user.role_id == 1:  # Assuming role_id = 1 is for employees
         try:
-            # Check if the user exists in the database
-            user = userservice.check_google_email(db, email)
-            logging.info(f"User {email} logged in successfully.")
-        except HTTPException as e:
-            logging.error(f"User {email} not found in database: {e.detail}")
-            return templates.TemplateResponse(
-                'error.html',
-                context={'request': request, 'error': f"User not found: {e.detail}"}
+            employee_id = start_recognition_and_monitoring(
+                db, background_tasks, login_id=user.id
             )
-
-        # Store user info in session for later use
-        request.session['user'] = {
-            "email": user.email,
-            "role_id": user.role_id
-        }
-
-        # Create an access token for the user
-        access_token = auth.create_access_token(data={"sub": user.email},expires_delta=60)
-
-        # Clear the state from session after use
-        request.session.pop('oauth_state', None)
-
-        # Set the access token in an HTTP-only cookie
-        response = RedirectResponse(url='/dashboard')
-        response.set_cookie(
-            key="access_token", 
-            value=access_token, 
-            httponly=True,  # HTTP-only flag prevents JS access
-            secure=True,    # Make sure to use `secure=True` in production (requires HTTPS)
-            max_age=timedelta(minutes=30),  # Token expiration
-            samesite="Lax"  # Helps mitigate CSRF attacks
+            if not employee_id:
+                logger.info("Login succeeded but employee not recognized")
+            else:
+                logger.info(f"Employee {employee_id} recognized and monitoring started")
+                request.session["employee_id"] = employee_id
+        except HTTPException as e:
+            logger.warning(f"Monitoring failed: {e.detail}")
+            employee_id = None
+    else:
+        logger.info(
+            f"User {email} is an admin (role_id = {user.role_id}), skipping monitoring"
         )
 
-        # Redirect to the dashboard
-        return response
-
-    return templates.TemplateResponse(
-        'error.html',
-        context={'request': request, 'error': "Failed to retrieve user information from Google."}
+    request.session["user"] = {"email": user.email, "role_id": user.role_id}
+    access_token = auth.create_access_token(
+        data={"sub": user.email}, expires_delta=timedelta(minutes=60)
     )
+    request.session.pop("oauth_state", None)
+
+    response = RedirectResponse(url="/dashboard")
+    response.set_cookie(
+        key="access_token",
+        value=access_token,
+        httponly=True,
+        secure=True,
+        max_age=timedelta(minutes=30).total_seconds(),
+        samesite="Lax",
+    )
+    return response
 
