@@ -6,7 +6,7 @@ from starlette.requests import Request
 from requests import Session
 from app.api.service.user_service import UserService
 from app.api.utils.auth_utils import AuthUtils
-from app.config import get_db
+from app.dependencies import get_db
 
 router = APIRouter()
 auth = AuthUtils()
@@ -19,17 +19,19 @@ templates = Jinja2Templates(directory="app/frontend/template")
 
 @router.get("/")
 async def home():
-    return RedirectResponse(url='/dashboard')
+    return RedirectResponse(url="/dashboard")
+
 
 @router.get("/login", response_class=HTMLResponse)
 async def login(request: Request):
     """Home route to display the login page."""
     return templates.TemplateResponse("login.html", {"request": request})
 
+
 @router.get("/register", response_class=HTMLResponse)
 async def register(request: Request):
-    
     return templates.TemplateResponse("register.html", {"request": request})
+
 
 @router.get("/test", response_class=HTMLResponse)
 async def test(request: Request):
