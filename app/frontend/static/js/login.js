@@ -18,8 +18,10 @@ async function validateLogin(event) {
 
     if (response.ok) {
       const data = await response.json();
+      console.log("Data:", data);
       console.log("Token:", data.access_token); // Fixed from data.token to data.access_token
       sessionStorage.setItem("user", data.access_token);
+      console.log("Role ID:", data.role_id);
 
       // Redirect based on role_id
       if (data.role_id === 0) {

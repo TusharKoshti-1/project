@@ -38,38 +38,22 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
 def login(
     login_data: UserLogin,
     db: Session = Depends(get_db),
-    background_tasks: BackgroundTasks = None,
+    background_tasks: BackgroundTasks = None,  # Removed default None as this is required
 ):
     user = userservice.login_user(db, login_data)
     access_token = auth.create_access_token(data={"sub": user.email})
 
-    employee_id = None
-    if user.role_id == 1:  # Employee role
-        try:
-            employee_id = start_recognition_and_monitoring(
-                db, background_tasks, login_id=user.id
-            )
-            if not employee_id:
-                logger.info("Login succeeded but employee not recognized")
-            else:
-                logger.info(f"Employee {employee_id} recognized and monitoring started")
-        except HTTPException as e:
-            logger.warning(f"Monitoring failed: {e.detail}")
-            employee_id = None
-    else:
-        logger.info(
-            f"User {user.email} is an admin (role_id = {user.role_id}), skipping monitoring"
-        )
-
-    response = JSONResponse(
-        content={
-            "msg": "Login successful",
-            "access_token": access_token,
-            "token_type": "bearer",
-            "role_id": user.role_id,
-            "employee_id": employee_id if employee_id else None,
-        }
-    )
+    # Create base response
+    response_content = {
+        "msg": "Login successful",
+        "access_token": access_token,
+        "token_type": "bearer",
+        "role_id": user.role_id,
+        "employee_id": None
+    }
+    
+    # Set access token cookie for all authenticated users
+    response = JSONResponse(content=response_content)
     response.set_cookie(
         key="access_token",
         value=access_token,
@@ -78,15 +62,35 @@ def login(
         samesite="Lax",
         max_age=3600,
     )
-    if employee_id:
-        response.set_cookie(
-            key="employee_id",
-            value=str(employee_id),
-            httponly=True,
-            secure=True,
-            samesite="Lax",
-            max_age=3600,
-        )
+
+    # Handle employee recognition
+    if user.role_id == 1:
+        try:
+            employee_id = start_recognition_and_monitoring(
+                db, background_tasks, login_id=user.id
+            )
+            if employee_id:
+                logger.info(f"Employee {employee_id} recognized and monitoring started")
+                # Set employee-specific cookies
+                response.set_cookie(
+                    key="employee_id",
+                    value=str(employee_id),
+                    httponly=True,
+                    secure=True,
+                    samesite="Lax",
+                    max_age=3600,
+                )
+                response_content["employee_id"] = employee_id
+            else:
+                logger.info("Login succeeded but employee not recognized")
+                
+        except HTTPException as e:
+            logger.error(f"Employee recognition failed: {e.detail}")
+            raise  # Re-raise the exception to return proper error response
+
+    else:
+        logger.info(f"Admin login: {user.email} (role_id={user.role_id})")
+
     return response
 
 
