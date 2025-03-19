@@ -6,7 +6,7 @@ from starlette.requests import Request
 from requests import Session
 from app.api.service.user_service import UserService
 from app.api.utils.auth_utils import AuthUtils
-from app.config import get_db
+from app.dependencies import get_db
 
 
 router = APIRouter()
