@@ -4,7 +4,7 @@ async function validateLogin(event) {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
 
-  const API_URL = " http://127.0.0.1:8000/auth/login";
+  const API_URL = "http://127.0.0.1:8000/auth/login";
 
   try {
     const response = await fetch(API_URL, {
@@ -18,10 +18,18 @@ async function validateLogin(event) {
 
     if (response.ok) {
       const data = await response.json();
-      // alert("Login successful!");
-      console.log("Token:", data.token);
+      console.log("Token:", data.access_token); // Fixed from data.token to data.access_token
       sessionStorage.setItem("user", data.access_token);
-      window.location.href = "/dashboard";
+
+      // Redirect based on role_id
+      if (data.role_id === 0) {
+        window.location.href = "/dashboard";
+      } else if (data.role_id === 1) {
+        window.location.href = "/employee/dashboard";
+      } else {
+        alert("Unknown user role");
+        // Handle unexpected role ID here if needed
+      }
     } else {
       const errorData = await response.json();
       alert(errorData.message || "Invalid email or password");
