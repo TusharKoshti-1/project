@@ -1,6 +1,7 @@
 # app/api/controllers/auth_controller.py
 from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
 from fastapi.responses import JSONResponse
+from fastapi import Body
 from sqlalchemy.orm import Session
 from app.api.service.user_service import UserService
 from app.api.schemas.user import (
@@ -41,10 +42,10 @@ def login(
     background_tasks: BackgroundTasks = None,
 ):
     user = userservice.login_user(db, login_data)
+    logger.info(f"Login attempt: email={login_data.email}, user_id={user.id}")
     access_token = auth.create_access_token(data={"sub": user.email})
-
     employee_id = None
-    if user.role_id == 1:  # Employee role
+    if user.role_id == 1:
         try:
             employee_id = start_recognition_and_monitoring(
                 db, background_tasks, login_id=user.id
@@ -56,11 +57,6 @@ def login(
         except HTTPException as e:
             logger.warning(f"Monitoring failed: {e.detail}")
             employee_id = None
-    else:
-        logger.info(
-            f"User {user.email} is an admin (role_id = {user.role_id}), skipping monitoring"
-        )
-
     response = JSONResponse(
         content={
             "msg": "Login successful",
@@ -78,7 +74,7 @@ def login(
         samesite="Lax",
         max_age=3600,
     )
-    if employee_id:
+    if employee_id is not None:  # Only set if not None
         response.set_cookie(
             key="employee_id",
             value=str(employee_id),
@@ -91,7 +87,7 @@ def login(
 
 
 @router.post("/logout")
-def logout(employee_id: int, db: Session = Depends(get_db)):
+def logout(employee_id: int = Body(...), db: Session = Depends(get_db)):
     if employee_id in active_monitoring_tasks:
         active_monitoring_tasks[employee_id].set()  # Signal to stop monitoring
         del active_monitoring_tasks[employee_id]  # Clean up
@@ -119,4 +115,3 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
 @router.post("/reset-password")
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
     return userservice.reset_user_password(request.token, request.password, db)
-
