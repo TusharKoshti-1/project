@@ -20,6 +20,12 @@ class ForgotPasswordRequest(BaseModel):
     email: EmailStr
     class Config:
         from_attributes = True
+        
+class OtpVerifyRequest(BaseModel):
+    email: EmailStr
+    otp: str
+    class Config:
+        from_attributes = True
 
 class ResetPasswordRequest(BaseModel):
     email: EmailStr

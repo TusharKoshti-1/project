@@ -6,6 +6,7 @@ from app.api.service.user_service import UserService
 from app.api.schemas.user import (
     ForgotPasswordRequest,
     ResetPasswordRequest,
+    OtpVerifyRequest,
     UserRegister,
     UserLogin,
 )
@@ -122,9 +123,21 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
 
 @router.post("/reset-password")
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
-    return userservice.reset_user_password(
+    try:
+        userservice.reset_user_password(
         email=request.email,
         new_password=request.password,
         otp=request.otp,  # Include OTP if required
         db=db
     )
+        return{"message": "Password reset Successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.post("/verify-otp")
+def verify_otp(request: OtpVerifyRequest, db: Session = Depends(get_db)):
+    try:
+        userservice.verify_otp(db,request.email,request.otp)
+        return{"message": "OTP verified"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
