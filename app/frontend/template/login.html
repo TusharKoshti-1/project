@@ -20,13 +20,23 @@
     <link rel="stylesheet" type="text/css" href="/static/vendors/styles/core.css">
     <link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
     <link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
+    <!-- Font Awesome for eye icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <style>
+        .input-group-append .toggle-password {
+            cursor: pointer;
+            padding: 0 10px;
+        }
+    </style>
 </head>
-<body class="login-page" >
+<body class="login-page">
     <div class="login-header box-shadow">
         <div class="container-fluid d-flex justify-content-between align-items-center">
             <div class="brand-logo">
                 <a href="/login">
-                    <img src="" alt="">
+                    <img src="/static/vendors/images/deskapp-logo.svg" alt=""> <!-- Fixed empty src -->
                 </a>
             </div>
             <div class="login-menu">    
@@ -47,23 +57,23 @@
                         <div class="login-title">
                             <h2 class="text-center text-primary">Login</h2>
                         </div>
-                        <form>
-							<div class="select-role">
-								<div class="btn-group btn-group-toggle" data-toggle="buttons">
-									<label class="btn active">
-										<input type="radio" name="options" id="admin">
-										<div class="icon"><img src="/static/vendors/images/briefcase.svg" class="svg" alt=""></div>
-										<span>I'm</span>
-										Manager
-									</label>
-									<label class="btn">
-										<input type="radio" name="options" id="user">
-										<div class="icon"><img src="/static/vendors/images/person.svg" class="svg" alt=""></div>
-										<span>I'm</span>
-										Employee
-									</label>
-								</div>
-							</div>
+                        <form id="login-form">
+                            <div class="select-role">
+                                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                    <label class="btn active">
+                                        <input type="radio" name="options" id="admin" value="1" checked>
+                                        <div class="icon"><img src="/static/vendors/images/briefcase.svg" class="svg" alt=""></div>
+                                        <span>I'm</span>
+                                        Manager
+                                    </label>
+                                    <label class="btn">
+                                        <input type="radio" name="options" id="user" value="0">
+                                        <div class="icon"><img src="/static/vendors/images/person.svg" class="svg" alt=""></div>
+                                        <span>I'm</span>
+                                        Employee
+                                    </label>
+                                </div>
+                            </div>
                             <div class="input-group custom">
                                 <input type="email" id="email" class="form-control form-control-lg" placeholder="Email">
                                 <div class="input-group-append custom">
@@ -73,9 +83,9 @@
                             <div class="input-group custom">
                                 <input type="password" id="password" class="form-control form-control-lg" placeholder="**********">
                                 <div class="input-group-append custom">
-                                    <span class="input-group-text">
-                                        <i class="dw dw-padlock1"></i>
-                                        <i class="dw dw-eye" id="togglePassword" style="cursor: pointer; margin-left: 10px;"></i>
+                                    <span class="input-group-text"><i class="dw dw-padlock1"></i></span>
+                                    <span class="input-group-text toggle-password" data-target="password">
+                                        <i class="fas fa-eye"></i>
                                     </span>
                                 </div>
                             </div>
@@ -93,7 +103,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="input-group mb-0">
-                                        <a class="btn btn-primary btn-lg btn-block" onclick="validateLogin(event)">Sign In</a>
+                                        <button type="submit" class="btn btn-primary btn-lg btn-block">Sign In</button>
                                     </div>
                                     <div class="font-16 weight-600 pt-10 pb-10 text-center" data-color="#707373">OR</div>
                                     <div class="input-group mb-0">
@@ -108,22 +118,10 @@
         </div>
     </div>
     <!-- JavaScript -->
-    <script>
-        document.getElementById("togglePassword").addEventListener("click", function () {
-            var passwordField = document.getElementById("password");
-            if (passwordField.type === "password") {
-                passwordField.type = "text";
-            } else {
-                passwordField.type = "password";
-            }
-        });
-    </script>
-
-
-    <script src="/static/js/login.js"></script>
     <script src="/static/vendors/scripts/core.js"></script>
     <script src="/static/vendors/scripts/script.min.js"></script>
     <script src="/static/vendors/scripts/process.js"></script>
     <script src="/static/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/js/login.js"></script>
 </body>
 </html>

@@ -34,6 +34,26 @@ document.addEventListener("DOMContentLoaded", () => {
         return showModal(message, true);
     }
 
+    // Toggle password visibility
+    const togglePasswordElements = document.querySelectorAll(".toggle-password");
+    togglePasswordElements.forEach(toggle => {
+        toggle.addEventListener("click", () => {
+            const targetId = toggle.getAttribute("data-target");
+            const passwordInput = document.getElementById(targetId);
+            const icon = toggle.querySelector("i");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
+            }
+        });
+    });
+
     // Validate and submit reset password form
     async function validateResetPassword(event) {
         event.preventDefault();
@@ -61,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Retrieve email and OTP from sessionStorage
         const email = sessionStorage.getItem("resetEmail");
-        const otp = sessionStorage.getItem("verifiedOtp"); // Assuming OTP is stored after verification
+        const otp = sessionStorage.getItem("verifiedOtp");
 
         if (!email) {
             await showError("No email found. Please start the reset process again.");
