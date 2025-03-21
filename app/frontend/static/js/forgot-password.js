@@ -28,7 +28,7 @@ async function validateForgotPassword(event) {
     return;
   }
 
-  const API_URL = "https://exact-notable-tadpole.ngrok-free.app/users/forgot-password";
+  const API_URL = "http://127.0.0.1:8000/auth/forgot-password";
 
   try {
     const response = await fetch(API_URL, {
@@ -44,6 +44,7 @@ async function validateForgotPassword(event) {
 
     if (response.ok) {
       showSuccess(result.message || "Password reset email sent successfully.");
+      window.location.href = "/reset-password"; // Redirect to the reset password page
       document.getElementById("forgot-password-form").reset();
     } else {
       throw new Error(result.detail || "An error occurred while processing your request.");

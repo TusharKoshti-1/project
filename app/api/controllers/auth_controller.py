@@ -114,7 +114,7 @@ def logout(employee_id: int, db: Session = Depends(get_db)):
 @router.post("/forgot-password")
 def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db)):
     try:
-        userservice.send_password_reset_email(request.email, db)
+        userservice.send_password_reset_email(db, request.email)
         return {"message": "Password reset instructions have been sent to your email."}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -122,5 +122,9 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
 
 @router.post("/reset-password")
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
-    return userservice.reset_user_password(request.token, request.password, db)
-
+    return userservice.reset_user_password(
+        email=request.email,
+        new_password=request.password,
+        otp=request.otp,  # Include OTP if required
+        db=db
+    )

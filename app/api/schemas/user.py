@@ -18,7 +18,13 @@ class UserLogin(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+    class Config:
+        from_attributes = True
 
 class ResetPasswordRequest(BaseModel):
-    token: str
+    email: EmailStr
     password: str
+    otp: str
+
+    class Config:
+        from_attributes = True

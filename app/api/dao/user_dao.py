@@ -1,4 +1,5 @@
 # app/api/dao/user_dao.py
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from app.api.vo.login_vo import User
 from datetime import datetime  # Ensure this is imported
