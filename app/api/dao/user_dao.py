@@ -1,4 +1,5 @@
 # app/api/dao/user_dao.py
+from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from app.api.vo.login_vo import User
 from datetime import datetime  # Ensure this is imported
@@ -27,3 +28,12 @@ class UserDAO:
     @staticmethod
     def get_all_users(db: Session):
         return db.query(User).all()
+    
+    @staticmethod
+    def update_user_password(db: Session, user: User, new_password: str):
+        
+        user.password = new_password
+        user.modified_on = datetime.utcnow()  # Update the modified timestamp
+        db.commit()
+        db.refresh(user)
+        return user
