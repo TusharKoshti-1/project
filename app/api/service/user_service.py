@@ -56,8 +56,8 @@ class UserService:
         return UserDAO.get_users_by_role(db, 0)
 
     @staticmethod
-    def get_admin_data(db: Session):
-        return UserDAO.get_users_by_role(db, 1)
+    def get_user_by_id(db: Session, user_id: int):
+        return UserDAO.get_users_by_user_id(db, user_id)
 
     @staticmethod
     def check_google_email(db: Session, email: EmailStr):

@@ -48,6 +48,7 @@ def login(
     response_content = {
         "msg": "Login successful",
         "access_token": access_token,
+        "user_id": user.id,
         "token_type": "bearer",
         "role_id": user.role_id,
         "employee_id": None
