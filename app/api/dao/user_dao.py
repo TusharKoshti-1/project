@@ -14,8 +14,13 @@ class UserDAO:
     def create_user(db: Session, user_data: dict):
         user = User(
             email=user_data["email"],
+            phone=user_data["phone"],
             password=user_data["password"],
+            full_name=user_data["full_name"],
+            gender=user_data["gender"],
             role_id=user_data["role_id"],
+            city=user_data["city"],
+            state=user_data["state"],
             created_on=user_data.get("created_on", datetime.utcnow()),
             modified_on=user_data.get("modified_on", datetime.utcnow()),
             is_deleted=user_data.get("is_deleted", False),

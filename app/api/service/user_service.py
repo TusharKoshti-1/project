@@ -25,9 +25,15 @@ class UserService:
             )
         hashed_password = auth.get_password_hash(user_data.password)
         return UserDAO.create_user(db, {
-            'email': user_data.email,
-            'password': hashed_password,
-            'role_id': user_data.role_id
+        'email': user_data.email,
+        'phone': user_data.phone,
+        'password': hashed_password,
+        'full_name': user_data.full_name,
+        'gender': user_data.gender,
+        'role_id': user_data.role_id,
+        'city': user_data.city,
+        'state': user_data.state
+
         })
 
     @staticmethod
