@@ -20,128 +20,10 @@
 		<link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
 		<link rel="stylesheet" type="text/css" href="/static/src/plugins/jvectormap/jquery-jvectormap-2.0.3.css">
 		<link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
+		<link rel="stylesheet" type="text/css" href="/static/vendors/styles/profile.css">
 	
 		   <!-- Chart-specific styles -->
-		   <style>
-			body {
-			  font-family: 'Segoe UI', sans-serif;
-			  background-color: #e9f0f7;
-			  display: flex;
-			  justify-content: center;
-			  align-items: flex-start;
-			  min-height: 100vh;
-			  margin: 0;
-			  padding: 30px;
-			}
-		
-			.container {
-			  display: flex;
-			  gap: 30px;
-			  align-items: flex-start;
-			}
-		
-			.profile-container {
-			  background-color: #fff;
-			  padding: 30px;
-			  border-radius: 15px;
-			  width: 400px;
-			  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-			  text-align: center;
-			  
-			}
-		
-			.profile-pic {
-			  width: 150px;
-			  height: 150px;
-			  border-radius: 50%;
-			  border: 4px solid #007bff;
-			  object-fit: cover;
-			  background-color: #f0f0f0;
-			  margin-bottom: 15px;
-			}
-		
-			.profile-card h2 {
-			  color: #333;
-			  font-size: 26px;
-			  margin-bottom: 8px;
-			}
-		
-			.profile-card p {
-			  color: #555;
-			  font-size: 16px;
-			  margin: 5px 0;
-			}
-		
-			.info-label {
-			  font-weight: 600;
-			  color: #222;
-			}
-		
-			button {
-			  padding: 12px 20px;
-			  background-color: #007bff;
-			  color: #fff;
-			  border: none;
-			  border-radius: 10px;
-			  cursor: pointer;
-			  font-size: 16px;
-			  width: 100%;
-			  margin-top: 15px;
-			  transition: background-color 0.3s;
-			}
-		
-			button:hover {
-			  background-color: #0056b3;
-			}
-		
-			.edit-form {
-			  display: none;
-			  background-color: #fff;
-			  padding: 25px;
-			  border-radius: 15px;
-			  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-			  width: 350px;
-			}
-		
-			.edit-form h3 {
-			  margin-bottom: 15px;
-			  color: #333;
-			}
-		
-			.edit-form label {
-			  display: block;
-			  margin: 10px 0 5px;
-			  font-weight: 600;
-			  color: #333;
-			}
-		
-			.edit-form input {
-			  width: 100%;
-			  padding: 12px;
-			  border: 1px solid #ccc;
-			  border-radius: 8px;
-			  background-color: #fff;
-			}
-		
-			.edit-form input:focus {
-			  border-color: #007bff;
-			  outline: none;
-			}
-		
-			.details {
-			  text-align: left;
-			  margin-top: 20px;
-			}
-		
-			.details p {
-			  font-size: 15px;
-			  color: #444;
-			  margin-bottom: 10px;
-			}
-		  </style>
 		 
-	
-	
 	</head>
 	<body class="header-white sidebar-light">
 
@@ -352,6 +234,7 @@
 			  <button onclick="saveProfile()">Save Changes</button>
 			</div>
 		  </div>
+		  
 		
 	<!-- js -->
 	<script src="/static/vendors/scripts/core.js"></script>
@@ -359,33 +242,7 @@
 	<script src="/static/vendors/scripts/process.js"></script>
 	<script src="/static/vendors/scripts/layout-settings.js"></script>
 	<script src="/static/src/plugins/cropperjs/dist/cropper.js"></script>
-	<script>
-		 function toggleEdit() {
-      const form = document.getElementById('editForm');
-      form.style.display = form.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function saveProfile() {
-      const name = document.getElementById('editName').value.trim();
-      const email = document.getElementById('editEmail').value.trim();
-      const phone = document.getElementById('editPhone').value.trim();
-      const photoFile = document.getElementById('editPhotoFile').files[0];
-
-      if (name) document.getElementById('adminName').innerText = name;
-      if (email) document.getElementById('adminEmail').innerText = email;
-      if (phone) document.getElementById('adminPhone').innerText = phone;
-
-      if (photoFile) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          document.getElementById('adminPhoto').src = e.target.result;
-        };
-        reader.readAsDataURL(photoFile);
-      }
-
-      toggleEdit();
-    }
-	  </script>
-		
+	<script src="/static/vendors/scripts/profile.js"></script>
+	
 </body>
 </html>
