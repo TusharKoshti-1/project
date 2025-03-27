@@ -1,4 +1,4 @@
-$(document).ready(function () {
+  $(document).ready(function () {
   $(".knob").knob();
   function animateKnob(selector, targetValue) {
     $({ value: 0 }).animate(

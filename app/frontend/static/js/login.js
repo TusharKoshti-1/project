@@ -65,6 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
               console.log("Data:", data);
               console.log("Token:", data.access_token);
               sessionStorage.setItem("user", data.access_token);
+              sessionStorage.setItem("userId", data.user_id);
               console.log("Role ID:", data.role_id);
 
               // Redirect based on role_id

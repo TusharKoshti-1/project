@@ -25,9 +25,15 @@ class UserService:
             )
         hashed_password = auth.get_password_hash(user_data.password)
         return UserDAO.create_user(db, {
-            'email': user_data.email,
-            'password': hashed_password,
-            'role_id': user_data.role_id
+        'email': user_data.email,
+        'phone': user_data.phone,
+        'password': hashed_password,
+        'full_name': user_data.full_name,
+        'gender': user_data.gender,
+        'role_id': user_data.role_id,
+        'city': user_data.city,
+        'state': user_data.state
+
         })
 
     @staticmethod
@@ -50,8 +56,8 @@ class UserService:
         return UserDAO.get_users_by_role(db, 0)
 
     @staticmethod
-    def get_admin_data(db: Session):
-        return UserDAO.get_users_by_role(db, 1)
+    def get_user_by_id(db: Session, user_id: int):
+        return UserDAO.get_users_by_user_id(db, user_id)
 
     @staticmethod
     def check_google_email(db: Session, email: EmailStr):

@@ -1,20 +1,18 @@
-from pydantic import BaseModel, EmailStr 
-
+from pydantic import BaseModel, EmailStr
 
 class UserRegister(BaseModel):
     email: EmailStr
+    phone: str
     password: str
-    role_id: int
-
-    class Config:
-        from_attributes = True
+    full_name: str
+    gender: str
+    role_id: int = 0  # Default to regular user
+    city: str | None = None
+    state: str | None = None
 
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-
-    class Config:
-        from_attributes = True
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
@@ -34,3 +32,4 @@ class ResetPasswordRequest(BaseModel):
 
     class Config:
         from_attributes = True
+
