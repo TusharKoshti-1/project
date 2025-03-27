@@ -29,6 +29,28 @@ class UserDAO:
         db.commit()
         db.refresh(user)
         return user
+    
+    @staticmethod
+    def create_employee_user(db: Session, user_data: dict):
+        user = User(
+        email=user_data["email"],  # Required
+        password=user_data["password"],  # Required
+        role_id=user_data["role_id"],  # Required
+
+        # Fields with default values
+        phone=user_data.get("phone", "0000000000"),  # Default phone
+        full_name=user_data.get("full_name", "Unknown"),  # Default name
+        gender=user_data.get("gender", "Not Specified"),  # Default gender
+        city=user_data.get("city", "Not Provided"),  # Default city
+        state=user_data.get("state", "Not Provided"),  # Default state
+        created_on=user_data.get("created_on", datetime.utcnow()),  # Default timestamp
+        modified_on=user_data.get("modified_on", datetime.utcnow()),  # Default timestamp
+        is_deleted=user_data.get("is_deleted", False),  # Default to False
+    )
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+        return user
 
     @staticmethod
     def get_all_users(db: Session):

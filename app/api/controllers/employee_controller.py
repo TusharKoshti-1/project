@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 def register_employee(
     request: Request,
     name: str = Form(...),
-    phone: str = Form(...),
+    mobile: str = Form(...),
     age: int = Form(...),
     gender: str = Form(...),
     department_name: str = Form(...),
@@ -23,11 +23,11 @@ def register_employee(
     role_id: int = Form(default=1),
     db: Session = Depends(get_db),
 ):
-    logger.info(f"Request received at /employees/register for {email}")
+    logger.info(f"Request received at /employees/register for {mobile}")
     try:
         employee_data = EmployeeRegister(
             name=name,
-            phone=phone,
+            phone=mobile,
             age=age,
             gender=gender,
             department_name=department_name,

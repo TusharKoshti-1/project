@@ -54,7 +54,7 @@ class EmployeeService:
         try:
             if UserDAO.get_user_by_email(self.db, employee_data.email):
                 raise HTTPException(status_code=400, detail="Email already registered.")
-            user = UserDAO.create_user(
+            user = UserDAO.create_employee_user(
                 self.db,
                 {
                     "email": employee_data.email,
