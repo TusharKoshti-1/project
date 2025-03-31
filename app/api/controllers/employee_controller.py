@@ -9,6 +9,7 @@ import logging
 router = APIRouter()
 logger = logging.getLogger(__name__)
 
+
 @router.post("/register")
 def register_employee(
     request: Request,
@@ -44,7 +45,10 @@ def register_employee(
         raise
     except Exception as e:
         logger.error(f"Unexpected error: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"An internal error occurred: {str(e)}")
+        raise HTTPException(
+            status_code=500, detail=f"An internal error occurred: {str(e)}"
+        )
+
 
 @router.get("/")
 def get_all_employees(db: Session = Depends(get_db)):
