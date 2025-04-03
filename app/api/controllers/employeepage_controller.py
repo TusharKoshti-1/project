@@ -1,3 +1,4 @@
+# app/api/controllers/employeepage_controller.py
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -41,7 +42,15 @@ async def employee_dashboard(request: Request, db: Session = Depends(get_db)):
     if isinstance(validation, RedirectResponse):
         return validation
 
-    return templates.TemplateResponse("employee_dashboard.html", {"request": request})
+    # Retrieve employee_id from cookie
+    employee_id = request.cookies.get("employee_id")
+    if not employee_id:
+        print("Warning: employee_id cookie not found in request")
+        return RedirectResponse(url="/login")
+
+    return templates.TemplateResponse(
+        "employee_dashboard.html", {"request": request, "employee_id": employee_id}
+    )
 
 
 @router.get("/employee/profile", response_class=HTMLResponse)
