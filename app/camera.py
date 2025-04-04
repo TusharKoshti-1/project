@@ -12,7 +12,12 @@ class Camera:
 
     def initialize(self):
         try:
-            self.cap = cv2.VideoCapture(0)  # 0 is default laptop webcam
+            self.cap = cv2.VideoCapture(0)
+            self.cap.set(
+                cv2.CAP_PROP_FRAME_WIDTH, 640
+            )  # Match uploaded image resolution
+            self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
+            self.cap.set(cv2.CAP_PROP_BRIGHTNESS, 100)  # Adjust lighting
             if not self.cap.isOpened():
                 raise Exception("Could not open webcam")
             logger.info("Webcam initialized successfully")
@@ -57,3 +62,4 @@ def release_camera():
     if camera is not None:
         camera.release()
         camera = None  # Reset the camera instance
+

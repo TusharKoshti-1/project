@@ -1,431 +1,682 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-	<!-- Basic Page Info -->
-	<meta charset="utf-8">
-	<title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
+  <head>
+    <!-- Basic Page Info -->
+    <meta charset="utf-8" />
+    <title>DeskApp - Bootstrap Admin Dashboard HTML Template</title>
 
-	<!-- Site favicon -->
-	<link rel="apple-touch-icon" sizes="180x180" href="/static/vendors/images/apple-touch-icon.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="/static/vendors/images/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="/static/vendors/images/favicon-16x16.png">
+    <!-- Site favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/static/vendors/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/static/vendors/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/static/vendors/images/favicon-16x16.png"
+    />
 
-	<!-- Mobile Specific Metas -->
-	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Mobile Specific Metas -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
 
-	<!-- Google Font -->
-	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-	<!-- CSS -->
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/core.css">
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/icon-font.min.css">
-	<link rel="stylesheet" type="text/css" href="/static/vendors/styles/style.css">
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/vendors/styles/core.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/vendors/styles/icon-font.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="/static/vendors/styles/style.css"
+    />
 
+    <!-- Ensure Bootstrap CSS is loaded -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+    />
 
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+    <!-- Custom CSS to fix dropdown -->
+    <style>
+      .dropdown-menu {
+        z-index: 1000 !important;
+        pointer-events: auto !important;
+        display: none;
+      }
+      .dropdown-menu.show {
+        display: block !important;
+      }
+      .dropdown-toggle {
+        pointer-events: auto !important;
+      }
+    </style>
 
-		gtag('config', 'UA-119386393-1');
-	</script>
-</head>
-<body class="header-white sidebar-light">
-	
-	<div class="pre-loader">
-		<div class="pre-loader-box">
-			<div class="loader-logo"><img src="/static/vendors/images/deskapp-logo.svg" alt=""></div>
-			<div class='loader-progress' id="progress_div">
-				<div class='bar' id='bar1'></div>
-			</div>
-			<div class='percent' id='percent1'>0%</div>
-			<div class="loading-text">
-				Loading...
-			</div>
-		</div>
-	</div>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=UA-119386393-1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "UA-119386393-1");
+    </script>
+  </head>
+  <body class="header-white sidebar-light">
+    <div class="pre-loader">
+      <div class="pre-loader-box">
+        <div class="loader-logo">
+          <img src="/static/vendors/images/deskapp-logo.svg" alt="" />
+        </div>
+        <div class="loader-progress" id="progress_div">
+          <div class="bar" id="bar1"></div>
+        </div>
+        <div class="percent" id="percent1">0%</div>
+        <div class="loading-text">Loading...</div>
+      </div>
+    </div>
 
-	<div class="header">
-		<div class="header-left">
-			<div class="menu-icon dw dw-menu"></div>
-			<div class="search-toggle-icon dw dw-search2" data-toggle="header_search"></div>
-			<div class="header-search">
-				<form>
-					<div class="form-group mb-0">
-						<i class="dw dw-search2 search-icon"></i>
-						<input type="text" class="form-control search-input" placeholder="Search Here">
-						<div class="dropdown">
-							<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-								<i class="ion-arrow-down-c"></i>
-							</a>
-							<div class="dropdown-menu dropdown-menu-right">
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">From</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">To</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="form-group row">
-									<label class="col-sm-12 col-md-2 col-form-label">Subject</label>
-									<div class="col-sm-12 col-md-10">
-										<input class="form-control form-control-sm form-control-line" type="text">
-									</div>
-								</div>
-								<div class="text-right">
-									<button class="btn btn-primary">Search</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
-		<div class="header-right">
-			<!-- <div class="dashboard-setting user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="javascript:;" data-toggle="right-sidebar">
-						<i class="dw dw-settings2"></i>
-					</a>
-				</div>
-			</div> -->
-			<div class="user-notification">
-				<div class="dropdown">
-					<a class="dropdown-toggle no-arrow" href="#" role="button" data-toggle="dropdown">
-						<i class="icon-copy dw dw-notification"></i>
-						<span class="badge notification-active"></span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right">
-						<div class="notification-list mx-h-350 customscroll">
-							<ul>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/img.jpg" alt="">
-										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo1.jpg" alt="">
-										<h3>Lea R. Frith</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo2.jpg" alt="">
-										<h3>Erik L. Richards</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo3.jpg" alt="">
-										<h3>John Doe</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/photo4.jpg" alt="">
-										<h3>Renee I. Hansen</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-								<li>
-									<a href="#">
-										<img src="/static/vendors/images/img.jpg" alt="">
-										<h3>Vicki M. Coleman</h3>
-										<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed...</p>
-									</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="user-info-dropdown">
-				<div class="dropdown">
-					<a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown">
-						<span class="user-icon">
-							<img src="/static/vendors/images/photo1.jpg" alt="">
-						</span>
-						<span class="user-name">Costspy</span>
-					</a>
-					<div class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list">
-						<a class="dropdown-item" href="/employee/profile"><i class="dw dw-user1"></i> Profile</a>
-						<!-- <a class="dropdown-item" href="profile.html"><i class="dw dw-settings2"></i> Setting</a> -->
-						<!-- <a class="dropdown-item" href="faq.html"><i class="dw dw-help"></i> Help</a> -->
-						<a class="dropdown-item" href="/employee/logout"><i class="dw dw-logout"></i> Log Out</a>
-					</div>
-				</div>
-			</div>
-			<!-- <div class="github-link">
-				<a href="https://github.com/dropways/deskapp" target="_blank"><img src="vendors/images/github.svg" alt=""></a>
-			</div> -->
-		</div>
-	</div>
-
-	<div class="left-side-bar">
-		<div class="brand-logo">
-			<a href="/employee/dashboard">
-				<img src="/static/vendors/images/deskapp-logo.svg" alt="" class="dark-logo">
-				<img src="/static/vendors/images/deskapp-logo-white.svg" alt="" class="light-logo">
-			</a>
-			<div class="close-sidebar" data-toggle="left-sidebar-close">
-				<i class="ion-close-round"></i>
-			</div>
-		</div>
-		<div class="menu-block customscroll">
-			<div class="sidebar-menu">
-				<ul id="accordion-menu">
-					<li>
-						<a href="/employee/dashboard" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-house-1"></span><span class="mtext">Home</span>
-						</a>
-					</li>
-<!-- 
-					<li class="dropdown">
-						<a href="javascript:;" class="dropdown-toggle">
-							<span class="micon dw dw-right-arrow1"></span><span class="mtext">Additional Pages</span>
-						</a>
-						<ul class="submenu"> -->
-							<!-- <li><a href="video-player.html">Video Player</a></li> -->
-							<!-- <li><a href="login.html">Login</a></li>
-							<li><a href="forgot-password.html">Forgot Password</a></li>
-							<li><a href="reset-password.html">Reset Password</a></li>
-						</ul>
-					</li> -->
-
-					<!-- <li>
-						<a href="chat.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-chat3"></span><span class="mtext">Chat</span>
-						</a>
-					</li> -->
-					<!-- <li>
-						<a href="settings.html" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-invoice"></span><span class="mtext">Invoice</span>
-						</a>
-					</li> -->
-
-					<li>
-						<a href="/employee/settings" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-settings"></span><span class="mtext">Settings</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="/employee/aboutus" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-help"></span><span class="mtext">About us</span>
-						</a>
-					</li>
-
-					<li>
-						<a href="/employee/logout" class="dropdown-toggle no-arrow">
-							<span class="micon dw dw-logout1"></span><span class="mtext">Log Out</span>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-
-	<div class="mobile-menu-overlay"></div>
-
-	<div class="main-container">
-        <div class="xs-pd-20-10 pd-ltr-20">
-            <div class="page-header">
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="title">
-                            <h4>Employee Dashboard</h4>
-                        </div>
-                        <nav aria-label="breadcrumb" role="navigation">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="/employee/dashboard">Home</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
-                            </ol>
-                        </nav>
+    <div class="header">
+      <div class="header-left">
+        <div class="menu-icon dw dw-menu"></div>
+        <div
+          class="search-toggle-icon dw dw-search2"
+          data-toggle="header_search"
+        ></div>
+        <div class="header-search">
+          <form>
+            <div class="form-group mb-0">
+              <i class="dw dw-search2 search-icon"></i>
+              <input
+                type="text"
+                class="form-control search-input"
+                placeholder="Search Here"
+              />
+              <div class="dropdown">
+                <a
+                  class="dropdown-toggle no-arrow"
+                  href="#"
+                  role="button"
+                  data-toggle="dropdown"
+                >
+                  <i class="ion-arrow-down-c"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label"
+                      >From</label
+                    >
+                    <div class="col-sm-12 col-md-10">
+                      <input
+                        class="form-control form-control-sm form-control-line"
+                        type="text"
+                      />
                     </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label">To</label>
+                    <div class="col-sm-12 col-md-10">
+                      <input
+                        class="form-control form-control-sm form-control-line"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <label class="col-sm-12 col-md-2 col-form-label"
+                      >Subject</label
+                    >
+                    <div class="col-sm-12 col-md-10">
+                      <input
+                        class="form-control form-control-sm form-control-line"
+                        type="text"
+                      />
+                    </div>
+                  </div>
+                  <div class="text-right">
+                    <button class="btn btn-primary">Search</button>
+                  </div>
                 </div>
+              </div>
             </div>
-            
-            <!-- Add header line -->
-            <hr class="header-line">
+          </form>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="user-notification">
+          <div class="dropdown">
+            <a
+              class="dropdown-toggle no-arrow"
+              href="#"
+              role="button"
+              data-toggle="dropdown"
+            >
+              <i class="icon-copy dw dw-notification"></i>
+              <span class="badge notification-active"></span>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+              <div class="notification-list mx-h-350 customscroll">
+                <ul>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/img.jpg" alt="" />
+                      <h3>John Doe</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/photo1.jpg" alt="" />
+                      <h3>Lea R. Frith</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/photo2.jpg" alt="" />
+                      <h3>Erik L. Richards</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/photo3.jpg" alt="" />
+                      <h3>John Doe</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/photo4.jpg" alt="" />
+                      <h3>Renee I. Hansen</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <img src="/static/vendors/images/img.jpg" alt="" />
+                      <h3>Vicki M. Coleman</h3>
+                      <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing
+                        elit, sed...
+                      </p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="user-info-dropdown">
+          <div class="dropdown">
+            <a
+              class="dropdown-toggle"
+              href="#"
+              role="button"
+              data-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="user-icon">
+                <img src="/static/vendors/images/photo1.jpg" alt="" />
+              </span>
+              <span class="user-name">Costspy</span>
+            </a>
+            <div
+              class="dropdown-menu dropdown-menu-right dropdown-menu-icon-list"
+              id="userDropdownMenu"
+            >
+              <a class="dropdown-item" href="/employee/profile"
+                ><i class="dw dw-user1"></i> Profile</a
+              >
+              <a class="dropdown-item" href="#" onclick="handleLogout()"
+                ><i class="dw dw-logout"></i> Log Out</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
-            <div class="row clearfix progress-box justify-content-center">
-                <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-					<div class="card-box pd-30 height-100-p">
-						<div class="progress-box text-center">
-							<input type="text" class="knob dial1" value="80" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgColor="#fff" data-fgColor="#1b00ff" data-angleOffset="180" readonly>
-							<h5 class="text-blue padding-top-10 h5">Attendance</h5>
-							<span class="d-block">80% Average <i class="fa fa-line-chart text-blue"></i></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-					<div class="card-box pd-30 height-100-p">
-						<div class="progress-box text-center">
-							<input type="text" class="knob dial2" value="70" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgColor="#fff" data-fgColor="#00e091" data-angleOffset="180" readonly>
-							<h5 class="text-light-green padding-top-10 h5">Productivity</h5>
-							<span class="d-block">75% Average <i class="fa text-light-green fa-line-chart"></i></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-					<div class="card-box pd-30 height-100-p">
-						<div class="progress-box text-center">
-							<input type="text" class="knob dial3" value="90" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgColor="#fff" data-fgColor="#f56767" data-angleOffset="180" readonly>
-							<h5 class="text-light-orange padding-top-10 h5">Projects Speed</h5>
-							<span class="d-block">90% Average <i class="fa text-light-orange fa-line-chart"></i></span>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-3 col-md-6 col-sm-12 mb-30">
-					<div class="card-box pd-30 height-100-p">
-						<div class="progress-box text-center">
-							<input type="text" class="knob dial4" value="65" data-width="120" data-height="120" data-linecap="round" data-thickness="0.12" data-bgColor="#fff" data-fgColor="#a683eb" data-angleOffset="180" readonly>
-							<h5 class="text-light-purple padding-top-10 h5">Pending Orders</h5>
-							<span class="d-block">65% Average <i class="fa text-light-purple fa-line-chart"></i></span>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="xs-pd-20-10 pd-ltr-20">
-				<div class="page-header">
-					<!-- Existing header content remains same -->
-				</div> 
-				
-				<!-- New Summary Cards Section -->
-				<div class="row clearfix">
-					<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-						<div class="card-box height-100-p widget-style1">
-							<div class="d-flex flex-wrap align-items-center">
-								<div class="widget-data">
-									<div class="h4 text-blue">$45,800</div>
-									<div class="weight-600 font-14">Total Earnings</div>
-								</div>
-								<i class="icon-copy dw dw-money-1 card-icon"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-						<div class="card-box height-100-p widget-style1">
-							<div class="d-flex flex-wrap align-items-center">
-								<div class="widget-data">
-									<div class="h4 text-success">12</div>
-									<div class="weight-600 font-14">Pending Tasks</div>
-								</div>
-								<i class="icon-copy dw dw-list-1 card-icon"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-						<div class="card-box height-100-p widget-style1">
-							<div class="d-flex flex-wrap align-items-center">
-								<div class="widget-data">
-									<div class="h4 text-danger">5</div>
-									<div class="weight-600 font-14">Urgent Projects</div>
-								</div>
-								<i class="icon-copy dw dw-alert card-icon"></i>
-							</div>
-						</div>
-					</div>
-					<div class="col-xl-3 col-lg-4 col-md-6 mb-30">
-						<div class="card-box height-100-p widget-style1">
-							<div class="d-flex flex-wrap align-items-center">
-								<div class="widget-data">
-									<div class="h4 text-purple">89%</div>
-									<div class="weight-600 font-14">Performance</div>
-								</div>
-								<i class="icon-copy dw dw-line-chart card-icon"></i>
-							</div>
-						</div>
-					</div>
-				</div>
-		
-				<!-- Enhanced Content Section -->
-				<div class="row">
-					<!-- Tasks List -->
-					<div class="col-lg-6 mb-30">
-						<div class="card-box height-100-p pd-20">
-							<h4 class="h4 text-blue mb-20">Recent Tasks</h4>
-							<ul class="task-list">
-								<li class="d-flex align-items-center justify-content-between">
-									<span>Complete project proposal</span>
-									<div class="badge badge-primary">Today</div>
-								</li>
-								<li class="d-flex align-items-center justify-content-between">
-									<span>Client meeting preparation</span>
-									<div class="badge badge-warning">Tomorrow</div>
-								</li>
-								<li class="d-flex align-items-center justify-content-between">
-									<span>Update documentation</span>
-									<div class="badge badge-success">Completed</div>
-								</li>
-							</ul>
-						</div>
-					</div>
-		
-					<!-- Recent Activity Section -->
-					<div class="row">
-						<div class="col-lg-12 mb-30">
-							<div class="card-box pd-20">
-								<h4 class="h4 text-blue mb-20">Recent Activities</h4>
-								<div class="activity-list">
-									<div class="media py-3">
-										<div class="activity-icon bg-light-blue">
-											<i class="icon-copy dw dw-edit-file"></i>
-										</div>
-										<div class="media-body">
-											<div class="weight-600">Updated project status</div>
-											<span class="text-muted">2 hours ago</span>
-										</div>
-									</div>
-									<div class="media py-3">
-										<div class="activity-icon bg-light-success">
-											<i class="icon-copy dw dw-checked"></i>
-										</div>
-										<div class="media-body">
-											<div class="weight-600">Completed client meeting</div>
-											<span class="text-muted">4 hours ago</span>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>	
-		</div>
-	</div>
+    <div class="left-side-bar">
+      <div class="brand-logo">
+        <a href="/employee/dashboard">
+          <img
+            src="/static/vendors/images/deskapp-logo.svg"
+            alt=""
+            class="dark-logo"
+          />
+          <img
+            src="/static/vendors/images/deskapp-logo-white.svg"
+            alt=""
+            class="light-logo"
+          />
+        </a>
+        <div class="close-sidebar" data-toggle="left-sidebar-close">
+          <i class="ion-close-round"></i>
+        </div>
+      </div>
+      <div class="menu-block customscroll">
+        <div class="sidebar-menu">
+          <ul id="accordion-menu">
+            <li>
+              <a href="/employee/dashboard" class="dropdown-toggle no-arrow">
+                <span class="micon dw dw-house-1"></span
+                ><span class="mtext">Home</span>
+              </a>
+            </li>
+            <li>
+              <a href="/employee/settings" class="dropdown-toggle no-arrow">
+                <span class="micon dw dw-settings"></span
+                ><span class="mtext">Settings</span>
+              </a>
+            </li>
+            <li>
+              <a href="/employee/aboutus" class="dropdown-toggle no-arrow">
+                <span class="micon dw dw-help"></span
+                ><span class="mtext">About us</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="#"
+                onclick="handleLogout()"
+                class="dropdown-toggle no-arrow"
+              >
+                <span class="micon dw dw-logout1"></span
+                ><span class="mtext">Log Out</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
 
+    <div class="mobile-menu-overlay"></div>
+
+    <div class="main-container">
+      <div class="xs-pd-20-10 pd-ltr-20">
+        <div class="page-header">
+          <div class="row">
+            <div class="col-md-6 col-sm-12">
+              <div class="title">
+                <h4>Employee Dashboard</h4>
+              </div>
+              <nav aria-label="breadcrumb" role="navigation">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                    <a href="/employee/dashboard">Home</a>
+                  </li>
+                  <li class="breadcrumb-item active" aria-current="page">
+                    Dashboard
+                  </li>
+                </ol>
+              </nav>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add header line -->
+        <hr class="header-line" />
+
+        <div class="row clearfix progress-box justify-content-center">
+          <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+            <div class="card-box pd-30 height-100-p">
+              <div class="progress-box text-center">
+                <input
+                  type="text"
+                  class="knob dial1"
+                  value="80"
+                  data-width="120"
+                  data-height="120"
+                  data-linecap="round"
+                  data-thickness="0.12"
+                  data-bgColor="#fff"
+                  data-fgColor="#1b00ff"
+                  data-angleOffset="180"
+                  readonly
+                />
+                <h5 class="text-blue padding-top-10 h5">Attendance</h5>
+                <span class="d-block"
+                  >80% Average <i class="fa fa-line-chart text-blue"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+            <div class="card-box pd-30 height-100-p">
+              <div class="progress-box text-center">
+                <input
+                  type="text"
+                  class="knob dial2"
+                  value="70"
+                  data-width="120"
+                  data-height="120"
+                  data-linecap="round"
+                  data-thickness="0.12"
+                  data-bgColor="#fff"
+                  data-fgColor="#00e091"
+                  data-angleOffset="180"
+                  readonly
+                />
+                <h5 class="text-light-green padding-top-10 h5">Productivity</h5>
+                <span class="d-block"
+                  >75% Average <i class="fa text-light-green fa-line-chart"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+            <div class="card-box pd-30 height-100-p">
+              <div class="progress-box text-center">
+                <input
+                  type="text"
+                  class="knob dial3"
+                  value="90"
+                  data-width="120"
+                  data-height="120"
+                  data-linecap="round"
+                  data-thickness="0.12"
+                  data-bgColor="#fff"
+                  data-fgColor="#f56767"
+                  data-angleOffset="180"
+                  readonly
+                />
+                <h5 class="text-light-orange padding-top-10 h5">
+                  Projects Speed
+                </h5>
+                <span class="d-block"
+                  >90% Average <i class="fa text-light-orange fa-line-chart"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-12 mb-30">
+            <div class="card-box pd-30 height-100-p">
+              <div class="progress-box text-center">
+                <input
+                  type="text"
+                  class="knob dial4"
+                  value="65"
+                  data-width="120"
+                  data-height="120"
+                  data-linecap="round"
+                  data-thickness="0.12"
+                  data-bgColor="#fff"
+                  data-fgColor="#a683eb"
+                  data-angleOffset="180"
+                  readonly
+                />
+                <h5 class="text-light-purple padding-top-10 h5">
+                  Pending Orders
+                </h5>
+                <span class="d-block"
+                  >65% Average <i class="fa text-light-purple fa-line-chart"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="xs-pd-20-10 pd-ltr-20">
+          <div class="page-header">
+            <!-- Existing header content remains same -->
+          </div>
+
+          <!-- New Summary Cards Section -->
+          <div class="row clearfix">
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+              <div class="card-box height-100-p widget-style1">
+                <div class="d-flex flex-wrap align-items-center">
+                  <div class="widget-data">
+                    <div class="h4 text-blue">$45,800</div>
+                    <div class="weight-600 font-14">Total Earnings</div>
+                  </div>
+                  <i class="icon-copy dw dw-money-1 card-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+              <div class="card-box height-100-p widget-style1">
+                <div class="d-flex flex-wrap align-items-center">
+                  <div class="widget-data">
+                    <div class="h4 text-success">12</div>
+                    <div class="weight-600 font-14">Pending Tasks</div>
+                  </div>
+                  <i class="icon-copy dw dw-list-1 card-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+              <div class="card-box height-100-p widget-style1">
+                <div class="d-flex flex-wrap align-items-center">
+                  <div class="widget-data">
+                    <div class="h4 text-danger">5</div>
+                    <div class="weight-600 font-14">Urgent Projects</div>
+                  </div>
+                  <i class="icon-copy dw dw-alert card-icon"></i>
+                </div>
+              </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 mb-30">
+              <div class="card-box height-100-p widget-style1">
+                <div class="d-flex flex-wrap align-items-center">
+                  <div class="widget-data">
+                    <div class="h4 text-purple">89%</div>
+                    <div class="weight-600 font-14">Performance</div>
+                  </div>
+                  <i class="icon-copy dw dw-line-chart card-icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Enhanced Content Section -->
+          <div class="row">
+            <!-- Tasks List -->
+            <div class="col-lg-6 mb-30">
+              <div class="card-box height-100-p pd-20">
+                <h4 class="h4 text-blue mb-20">Recent Tasks</h4>
+                <ul class="task-list">
+                  <li class="d-flex align-items-center justify-content-between">
+                    <span>Complete project proposal</span>
+                    <div class="badge badge-primary">Today</div>
+                  </li>
+                  <li class="d-flex align-items-center justify-content-between">
+                    <span>Client meeting preparation</span>
+                    <div class="badge badge-warning">Tomorrow</div>
+                  </li>
+                  <li class="d-flex align-items-center justify-content-between">
+                    <span>Update documentation</span>
+                    <div class="badge badge-success">Completed</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Recent Activity Section -->
+            <div class="row">
+              <div class="col-lg-12 mb-30">
+                <div class="card-box pd-20">
+                  <h4 class="h4 text-blue mb-20">Recent Activities</h4>
+                  <div class="activity-list">
+                    <div class="media py-3">
+                      <div class="activity-icon bg-light-blue">
+                        <i class="icon-copy dw dw-edit-file"></i>
+                      </div>
+                      <div class="media-body">
+                        <div class="weight-600">Updated project status</div>
+                        <span class="text-muted">2 hours ago</span>
+                      </div>
+                    </div>
+                    <div class="media py-3">
+                      <div class="activity-icon bg-light-success">
+                        <i class="icon-copy dw dw-checked"></i>
+                      </div>
+                      <div class="media-body">
+                        <div class="weight-600">Completed client meeting</div>
+                        <span class="text-muted">4 hours ago</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Add Canvases for Chart.js -->
+            <div class="col-lg-6 mb-30">
+              <div class="card-box pd-20">
+                <h4 class="h4 text-blue mb-20">
+                  Employee Attendance Rate (Last 30 Days)
+                </h4>
+                <canvas id="topEmployeesChart"></canvas>
+              </div>
+            </div>
+            <div class="col-lg-6 mb-30">
+              <div class="card-box pd-20">
+                <h4 class="h4 text-blue mb-20">
+                  Average Daily Productive Hours (Last 7 Days)
+                </h4>
+                <canvas id="performanceChart"></canvas>
+              </div>
+            </div>
+
+            <!-- Add Containers for ApexCharts -->
+            <div class="col-lg-6 mb-30">
+              <div class="card-box pd-20">
+                <h4 class="h4 text-blue mb-20">
+                  Daily Eye Closure Duration (Last 7 Days)
+                </h4>
+                <div id="metric-chart"></div>
+              </div>
+            </div>
+            <div class="col-lg-6 mb-30">
+              <div class="card-box pd-20">
+                <h4 class="h4 text-blue mb-20">
+                  Employee Activity Comparison (Last 7 Days)
+                </h4>
+                <div id="ai-performance-chart"></div>
+              </div>
+            </div>
+            <div class="col-lg-6 mb-30">
+              <div class="card-box pd-20">
+                <h4 class="h4 text-blue mb-20">
+                  Employee Time Allocation (Last 7 Days)
+                </h4>
+                <div id="donut-chart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hidden Input for employee_id -->
+    <input type="hidden" id="employee_id" value="{{ employee_id or '' }}" />
+
+    <!-- JavaScript for Logout and Dropdown -->
+    <script>
+      async function handleLogout() {
+        let employeeId = document.getElementById("employee_id").value;
+
+        if (!employeeId) {
+          const cookieMatch = document.cookie.match(
+            new RegExp("(^| )employee_id=([^;]+)"),
+          );
+          employeeId = cookieMatch ? cookieMatch[2] : null;
+        }
+
+        if (!employeeId) {
+          alert("Employee ID not found. Please log in again.");
+          window.location.href = "/login";
+          return;
+        }
+
+        try {
+          const response = await fetch("/auth/logout", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ employee_id: parseInt(employeeId) }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Logout failed: " + response.statusText);
+          }
+
+          const result = await response.json();
+          alert(result.msg);
+          window.location.href = "/login";
+        } catch (error) {
+          alert("Logout failed. Please try again.");
+        }
+      }
+
+      // Manual dropdown toggle
+      document
+        .querySelector(".user-info-dropdown .dropdown-toggle")
+        .addEventListener("click", function (e) {
+          const dropdownMenu = document.getElementById("userDropdownMenu");
+          if (dropdownMenu) {
+            dropdownMenu.classList.toggle("show");
+          }
+        });
+    </script>
+
+    <!-- Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-	<script src="/static/vendors/scripts/core.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
-	<script src="/static/vendors/scripts/script.min.js"></script>
-	<script src="/static/vendors/scripts/core.js"></script>
-	<script src="/static/vendors/scripts/script.min.js"></script>
-	<script src="https://code.highcharts.com/highcharts.js"></script>
-	<script src="https://code.highcharts.com/highcharts-more.js"></script>
-	<script src="/static/vendors/scripts/process.js"></script>
-	<script src="/static/vendors/scripts/layout-settings.js"></script>
-	<script src="/static/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
-	<script src="/static/src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
-	<script src="/static/src/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
-	<script src="/static/src/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-	<script src="/static/vendors/scripts/dashboard2.js"></script>			
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/static/vendors/scripts/core.js"></script>
+    <script src="/static/src/plugins/highcharts-6.0.7/code/highcharts.js"></script>
+    <script src="/static/src/plugins/highcharts-6.0.7/code/highcharts-more.js"></script>
+    <script src="/static/vendors/scripts/script.min.js"></script>
+    <script src="/static/vendors/scripts/process.js"></script>
+    <script src="/static/vendors/scripts/layout-settings.js"></script>
+    <script src="/static/src/plugins/jQuery-Knob-master/jquery.knob.min.js"></script>
+    <script src="/static/src/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
+    <script src="/static/src/plugins/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="/static/vendors/scripts/dashboard2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  </body>
 </html>

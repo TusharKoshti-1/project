@@ -10,6 +10,7 @@ from app.api.schemas.user import (
     UserRegister,
     UserLogin,
 )
+from pydantic import BaseModel
 from app.dependencies import get_db
 from app.api.utils.auth_utils import AuthUtils
 from app.api.utils.monitor_utils import (
@@ -23,6 +24,10 @@ userservice = UserService()
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/auth")
+
+
+class LogoutRequest(BaseModel):
+    employee_id: int
 
 
 @router.post("/register")
@@ -39,7 +44,7 @@ def register(user_data: UserRegister, db: Session = Depends(get_db)):
 def login(
     login_data: UserLogin,
     db: Session = Depends(get_db),
-    background_tasks: BackgroundTasks = None,  # Removed default None as this is required
+    background_tasks: BackgroundTasks = None,
 ):
     user = userservice.login_user(db, login_data)
     access_token = auth.create_access_token(data={"sub": user.email})
@@ -51,9 +56,9 @@ def login(
         "user_id": user.id,
         "token_type": "bearer",
         "role_id": user.role_id,
-        "employee_id": None
+        "employee_id": None,
     }
-    
+
     # Set access token cookie for all authenticated users
     response = JSONResponse(content=response_content)
     response.set_cookie(
@@ -85,10 +90,10 @@ def login(
                 response_content["employee_id"] = employee_id
             else:
                 logger.info("Login succeeded but employee not recognized")
-                
+
         except HTTPException as e:
             logger.error(f"Employee recognition failed: {e.detail}")
-            raise  # Re-raise the exception to return proper error response
+            raise
 
     else:
         logger.info(f"Admin login: {user.email} (role_id={user.role_id})")
@@ -97,10 +102,11 @@ def login(
 
 
 @router.post("/logout")
-def logout(employee_id: int, db: Session = Depends(get_db)):
+def logout(request: LogoutRequest, db: Session = Depends(get_db)):
+    employee_id = request.employee_id
     if employee_id in active_monitoring_tasks:
-        active_monitoring_tasks[employee_id].set()  # Signal to stop monitoring
-        del active_monitoring_tasks[employee_id]  # Clean up
+        active_monitoring_tasks[employee_id].set()
+        del active_monitoring_tasks[employee_id]
         logger.info(f"Monitoring stopped for employee {employee_id} on logout")
         response = JSONResponse(
             content={"msg": "Logout successful, monitoring stopped"}
@@ -126,19 +132,18 @@ def forgot_password(request: ForgotPasswordRequest, db: Session = Depends(get_db
 def reset_password(request: ResetPasswordRequest, db: Session = Depends(get_db)):
     try:
         userservice.reset_user_password(
-        email=request.email,
-        new_password=request.password,
-        otp=request.otp,  # Include OTP if required
-        db=db
-    )
-        return{"message": "Password reset Successfully"}
+            email=request.email, new_password=request.password, otp=request.otp, db=db
+        )
+        return {"message": "Password reset Successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.post("/verify-otp")
 def verify_otp(request: OtpVerifyRequest, db: Session = Depends(get_db)):
     try:
-        userservice.verify_otp(db,request.email,request.otp)
-        return{"message": "OTP verified"}
+        userservice.verify_otp(db, request.email, request.otp)
+        return {"message": "OTP verified"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+

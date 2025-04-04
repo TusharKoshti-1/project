@@ -222,3 +222,4 @@ def get_performance_distribution(employee_id: int = 2, db: Session = Depends(get
         round((events["other"] / total) * 100, 1),
         round((productive / total) * 100, 1),
     ]
+

@@ -1,5 +1,6 @@
 # app/api/schemas/employee_register.py
-from pydantic import BaseModel, EmailStr 
+from pydantic import BaseModel, EmailStr
+
 
 class EmployeeRegister(BaseModel):
     name: str
@@ -22,6 +23,6 @@ class EmployeeRegister(BaseModel):
                 "department_name": "Developer",
                 "email": "bc8080011@gmail.com",
                 "password": "room",
-                "role_id": 1
+                "role_id": 1,
             }
         }
