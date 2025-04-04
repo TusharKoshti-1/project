@@ -200,39 +200,36 @@
 		<div class="container">
 			<!-- Profile Section -->
 			<div class="profile-container">
-			  <div class="profile-card">
-				<img id="adminPhoto" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Admin Photo" class="profile-pic">
-				<h2 id="adminName">John Doe</h2>
-				<!-- <p id="adminRole">IT Field Administrator</p> -->
-		
-				<div class="details">
-				  <p><span class="info-label">Email:</span> <span id="adminEmail">johndoe@example.com</span></p>
-				  <p><span class="info-label">Phone:</span> <span id="adminPhone">+1 234 567 890</span></p>
-				  <!-- <p><span class="info-label">Department:</span> IT Support</p> -->
-				  <!-- <p><span class="info-label">Admin ID:</span> ITA-4567</p> -->
+				<div class="profile-card">
+					<img id="adminPhoto" src="https://randomuser.me/api/portraits/men/75.jpg" alt="Admin Photo" class="profile-pic">
+					<h2 id="adminName">John Doe</h2>
+					<div class="details">
+						<p><span class="info-label">Email:</span> <span id="adminEmail">johndoe@example.com</span></p>
+						<p><span class="info-label">Phone:</span> <span id="adminPhone">+1 234 567 890</span></p>
+					</div>
+			
+					<button onclick="toggleEdit()">Edit Profile</button>
 				</div>
-		
-				<button onclick="toggleEdit()">Edit Profile</button>
-			  </div>
 			</div>
-		
-			<!-- Edit Form Section -->
-			<div class="edit-form" id="editForm">
-			  <h3>Edit Profile</h3>
-			  <label>Name:</label>
-			  <input type="text" id="editName" placeholder="Enter Name">
-		
-			  <label>Email:</label>
-			  <input type="email" id="editEmail" placeholder="Enter Email">
-		
-			  <label>Phone:</label>
-			  <input type="text" id="editPhone" placeholder="Enter Phone">
-		
-			  <label>Change Photo (Upload Image):</label>
-			  <input type="file" id="editPhotoFile" accept="image/*">
-		
-			  <button onclick="saveProfile()">Save Changes</button>
-			</div>
+
+            <!-- Edit Form Section -->
+            <div class="edit-form" id="editForm" style="display: none;">
+                <h3>Edit Profile</h3>
+                <label>Name:</label>
+                <input type="text" id="editName" placeholder="Enter Name">
+
+                <label>Email:</label>
+                <input type="email" id="editEmail" placeholder="Enter Email">
+
+                <label>Phone:</label>
+                <input type="text" id="editPhone" placeholder="Enter Phone">
+
+                <label>Change Photo (Upload Image):</label>
+                <input type="file" id="editPhotoFile" name="profile_picture" accept="image/*">
+
+                <button onclick="saveProfile()">Save Changes</button>
+                <button onclick="toggleEdit()">Cancel</button> <!-- Added Cancel button -->
+            </div>
 		  </div>
 		  
 		
@@ -244,6 +241,7 @@
 	<script src="/static/src/plugins/cropperjs/dist/cropper.js"></script>
 	<script src="/static/vendors/scripts/profile.js"></script>
 	<script src="/static/js/profile.js"></script>
+	<script src="/static/js/header_data.js"></script>
 	
 </body>
 </html>

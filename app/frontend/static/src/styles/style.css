@@ -1131,6 +1131,10 @@ table.dataTable.dtr-inline.collapsed>tbody>tr.parent>td:first-child:before, tabl
 	-webkit-border-radius: 100%;
 	-moz-border-radius: 100%;
 	border-radius: 100%;
+	/* width: 40px; Match the intended size of the default image */
+    /* height: 40px; */
+    /* object-fit: cover; */
+	/* display: block; */
 }
 .user-info-dropdown .dropdown-toggle .user-name{
 	font-weight: 500;

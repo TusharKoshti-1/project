@@ -5,9 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const userId = sessionStorage.getItem("userId");
 
     // Elements
-    // const adminPhoto = document.getElementById("adminPhoto");
+    const adminPhoto = document.getElementById("adminPhoto"); // Added for profile photo
     const adminName = document.getElementById("adminName");
-    // const adminRole = document.getElementById("adminRole");
     const adminEmail = document.getElementById("adminEmail");
     const adminPhone = document.getElementById("adminPhone");
 
@@ -15,7 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const editName = document.getElementById("editName");
     const editEmail = document.getElementById("editEmail");
     const editPhone = document.getElementById("editPhone");
+    const editPhotoFile = document.getElementById("editPhotoFile"); // File input for photo
     const editForm = document.getElementById("editForm");
+
+    // Check if all elements exist
+    if (!adminPhoto || !adminName || !adminEmail || !adminPhone || !editName || !editEmail || !editPhone || !editPhotoFile || !editForm) {
+        console.error("One or more DOM elements not found. Check your HTML.");
+        return;
+    }
 
     async function fetchUserProfile() {
         if (!token || !userId) {
@@ -28,22 +34,29 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(`${API_URL}${userId}`, {
                 method: "GET",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json",
-                    "ngrok-skip-browser-warning": "true"
-                }
+                    "ngrok-skip-browser-warning": "true",
+                },
             });
 
             if (response.ok) {
                 const data = await response.json();
                 const user = data.user;
 
-                // Update profile display
+                // Update profile display including photo
                 adminName.textContent = user.name || "Unknown User";
                 adminEmail.textContent = user.email;
                 adminPhone.textContent = user.phone || "Not provided";
-                // adminRole.textContent = user.role_id === 1 ? "Administrator" : "Employee";
-                
+
+                // Handle profile photo (now base64)
+                if (user.profile_picture) {
+                    adminPhoto.src = user.profile_picture; // This will be "data:image/jpeg;base64,..."
+                } else {
+                    // Fallback to default image
+                    adminPhoto.src = "https://randomuser.me/api/portraits/men/75.jpg";
+                }
+
                 // Populate edit form
                 editName.value = user.name || "";
                 editEmail.value = user.email;
@@ -63,32 +76,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // Toggle edit form visibility
-    window.toggleEdit = function() {
+    window.toggleEdit = function () {
         editForm.style.display = editForm.style.display === "none" ? "block" : "none";
     };
 
-    // Save profile changes (you'll need to implement the PUT endpoint)
-    window.saveProfile = async function() {
+    // Save profile changes with FormData for file upload
+    window.saveProfile = async function () {
         if (!token) {
             alert("Please login first");
             return;
         }
 
-        const updatedProfile = {
-            name: editName.value.trim(),
-            email: editEmail.value.trim(),
-            phone: editPhone.value.trim()
-        };
+        const formData = new FormData();
+        formData.append("full_name", editName.value.trim());
+        formData.append("email", editEmail.value.trim());
+        formData.append("phone", editPhone.value.trim());
+
+        // Check if a file is selected
+        if (editPhotoFile.files && editPhotoFile.files[0]) {
+            formData.append("profile_picture", editPhotoFile.files[0]);
+            console.log("File appended to FormData:", editPhotoFile.files[0].name); // Debug log
+        } else {
+            console.warn("No file selected for upload.");
+        }
+
+        // Log FormData contents (for debugging)
+        for (let pair of formData.entries()) {
+            console.log(`${pair[0]}:`, pair[1]);
+        }
 
         try {
             const response = await fetch(`${API_URL}${userId}`, {
-                method: "PUT", // Assuming you'll add a PUT endpoint
+                method: "PUT",
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "ngrok-skip-browser-warning": "true"
+                    Authorization: `Bearer ${token}`,
+                    "ngrok-skip-browser-warning": "true",
                 },
-                body: JSON.stringify(updatedProfile)
+                body: formData,
             });
 
             if (response.ok) {
@@ -98,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 const errorData = await response.json();
                 alert(errorData.detail || "Failed to update profile");
+                console.error("Server response:", errorData);
             }
         } catch (error) {
             console.error("Error updating profile:", error);
