@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const formData = new FormData();
     formData.append("name", document.getElementById("name").value);
-    formData.append("phone", document.getElementById("phone").value);
+    formData.append("mobile", document.getElementById("phone").value);
     formData.append("age", document.getElementById("age").value);
     formData.append("gender", document.getElementById("gender").value);
     formData.append(
