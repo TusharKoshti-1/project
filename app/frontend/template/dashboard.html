@@ -460,40 +460,6 @@
     <script src="/static/vendors/scripts/dashboard2.js"></script>
     <script src="/static/js/header_data.js"></script>
 
-
-    <!-- Logout Script -->
-    <!-- <script>
-      let employeeId =
-        document.cookie
-          .split("; ")
-          .find((row) => row.startsWith("employee_id="))
-          ?.split("=")[1] || 2;
-
-      function handleLogout(e) {
-        e.preventDefault();
-        fetch("/auth/logout", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ employee_id: parseInt(employeeId) }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            document.cookie = "access_token=; Max-Age=0; path=/";
-            document.cookie = "employee_id=; Max-Age=0; path=/";
-            window.location.href = "/login";
-          })
-          .catch((error) => console.error("Logout failed:", error));
-      }
-      document
-        .getElementById("logout-link")
-        .addEventListener("click", handleLogout);
-      document
-        .getElementById("sidebar-logout")
-        .addEventListener("click", handleLogout);
-    </script> -->
   </body>
 </html>
+
